@@ -52,10 +52,10 @@ if (form) {
 }
 
 // ===== 4. WHATSAPP REDIRECT =====
-const phoneSection = document.querySelector(".phone-number"); // Change to your phone div ID
+const phoneSection = document.querySelector(".phone-number"); 
 if (phoneSection) {
   phoneSection.addEventListener("click", () => {
-    const phoneNumber = "9141177245"; // Your WhatsApp number without +
+    const phoneNumber = "9141177245"; 
     window.open(`https://wa.me/${phoneNumber}`, "_blank");
   });
 }
