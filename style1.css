@@ -19,8 +19,13 @@ body {
   font-family: "Inter", sans-serif;
   line-height: 1.6;
   color: #333;
-  background: linear-gradient(-45deg, #667eea, #764ba2, #f093fb, #f5576c);
-  background-size: 400% 400%;
+ background: linear-gradient(
+    135deg,
+    rgba(171, 175, 192, 0.85),
+    rgba(203, 205, 217, 0.85)
+  ); color: #1a1a1a;
+  font-family: Arial, sans-serif;
+   background-size: 400% 400%;
   animation: gradientShift 15s ease infinite;
   overflow-x: hidden;
 }
@@ -58,8 +63,12 @@ body {
   position: fixed;
   top: 0;
   width: 100%;
-  background: rgba(255, 255, 255, 0.95);
-  backdrop-filter: blur(10px);
+ background: linear-gradient(
+    135deg,
+    rgba(171, 175, 192, 0.85),
+    rgba(203, 205, 217, 0.85)
+  );
+  backdrop-filter: blur(12px);
   z-index: 1000;
   transition: all 0.3s ease;
   border-bottom: 1px solid rgba(0, 0, 0, 0.1);
@@ -74,6 +83,9 @@ body {
   cursor: pointer;
   position: relative; /* keep it in header layout */
   z-index: 2000;
+  
+  backdrop-filter: blur(6px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
 }
 
 .hamburger span {
@@ -82,6 +94,7 @@ body {
   background: #333;
   transition: 0.3s;
   border-radius: 2px;
+  
 }
 
 #top-text {
@@ -127,16 +140,30 @@ body {
 .list-top {
   display: flex; /* Arrange nav items side-by-side */
   list-style: none;
-  padding: 0;
+  padding: 8px 16px;
   margin: 0;
   gap: 2rem;
+
+ 
+  backdrop-filter: blur(6px);
+  border-radius: 12px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  transition: background 0.3s ease, transform 0.2s ease;
 }
+
 .list-top li a {
-  margin-right: 10px;
+   margin-right: 10px;
+ 
   text-decoration: none;
-  color: #333;
-  font-weight: 700;
+  font-weight: 500;
+  color: #2c2c54; /* dark lavender text for contrast */
+  transition: color 0.3s ease;
 }
+
+.list-top li a:hover {
+  color: #6a0572; /* soft purple accent on hover */
+}
+
 
 .social-icons a img {
   width: 30px;
@@ -577,7 +604,8 @@ expierences */
     opacity: 0.8;
   }
 }
-
+/* 
+//HHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHHH */
 .timeline {
   position: relative;
   max-width: 800px;
@@ -1127,8 +1155,8 @@ button:hover {
 /* 
 Footer */
 .footer {
-  background: linear-gradient(135deg, #1a1a1a 0%, #3b2f6b 50%, #1a1a1a 100%);
-  color: white;
+  background: linear-gradient(135deg, #4d6054 0%, #9fbdaa 50%, #2b312f 100%);
+  color: #1a1a1a; /* Dark text for better contrast */
   padding: 2rem 0;
   text-align: center;
   position: relative;
@@ -1141,12 +1169,9 @@ Footer */
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    45deg,
-    rgba(102, 126, 234, 0.08) 0%,
-    rgba(240, 147, 251, 0.08) 50%,
-    rgba(245, 87, 108, 0.08) 100%
-  );
+ background: linear-gradient(135deg, #f4f6f9 0%, #e9ecf1 50%, #f4f6f9 100%);
+  color: #1a1a1a;
+  font-family: Arial, sans-serif;
   animation: footerGlow 10s ease-in-out infinite;
   pointer-events: none;
 }
@@ -1179,17 +1204,17 @@ Footer */
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: rgb(48, 90, 181);
   text-decoration: none;
   transition: all 0.3s ease;
   cursor: pointer;
 }
 .footer-text {
-  color: #ccc;
+  color: #253156;
   font-size: 0.9rem;
 }
 .social-link:hover {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #8398f5 0%, #8b878e 100%);
   transform: translateY(-3px);
 }
 
