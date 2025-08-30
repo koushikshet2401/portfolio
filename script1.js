@@ -95,7 +95,7 @@ document.addEventListener("DOMContentLoaded", () => {
   if (phoneSection) {
     const phoneNumber = phoneSection.dataset.phone || "9141177245"; // fallback number
     phoneSection.addEventListener("click", () => {
-      const url = `https://wa.me/${phoneNumber}`;
+      const url = `https://wa.me/${9141177245}`;
       try {
         window.open(url, "_blank");
       } catch {
