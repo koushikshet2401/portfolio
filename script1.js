@@ -42,53 +42,123 @@ document.addEventListener("DOMContentLoaded", () => {
     });
   });
 
-  // ===== 3. FORM VALIDATION =====
-  const form = document.querySelector("form");
 
-  if (form) {
-    const showError = (input, message) => {
-      let errorSpan = input.nextElementSibling;
-      if (!errorSpan || !errorSpan.classList.contains("error")) {
-        errorSpan = document.createElement("span");
-        errorSpan.className = "error";
-        input.parentNode.appendChild(errorSpan);
-      }
-      errorSpan.textContent = message;
-    };
 
-    const clearErrors = () => {
-      document.querySelectorAll(".error").forEach(el => el.remove());
-    };
 
-    form.addEventListener("submit", (e) => {
-      clearErrors();
+// Initialize EmailJS
+(function(){
+  emailjs.init("5CuD7K8DVxPtGN4Va"); // 🔴 Replace this
+})();
 
-      const name = form.querySelector('input[name="name"]');
-      const email = form.querySelector('input[name="email"]');
-      const message = form.querySelector('textarea[name="message"]');
+const form = document.getElementById("contact-form");
+const button = form.querySelector("button");
 
-      let isValid = true;
+// ✅ Show single message only
+const showFormMessage = (text, color) => {
 
-      if (!name.value.trim()) {
-        showError(name, "Name is required.");
-        isValid = false;
-      }
+  let msg = form.querySelector(".form-msg");
 
-      if (!email.value.trim() || !/\S+@\S+\.\S+/.test(email.value)) {
-        showError(email, "Valid email is required.");
-        isValid = false;
-      }
-
-      if (!message.value.trim()) {
-        showError(message, "Message cannot be empty.");
-        isValid = false;
-      }
-
-      if (!isValid) {
-        e.preventDefault();
-      }
-    });
+  if (!msg) {
+    msg = document.createElement("p");
+    msg.className = "form-msg";
+    msg.style.marginTop = "10px";
+    msg.style.fontWeight = "500";
+    form.appendChild(msg);
   }
+
+  msg.innerText = text;
+  msg.style.color = color;
+};
+
+// ✅ Remove old validation errors
+const clearErrors = () => {
+  document.querySelectorAll(".error").forEach(el => el.remove());
+};
+
+// ✅ Show validation error
+const showError = (input, message) => {
+
+  let errorSpan = input.parentNode.querySelector(".error");
+
+  if (!errorSpan) {
+    errorSpan = document.createElement("span");
+    errorSpan.className = "error";
+    errorSpan.style.color = "red";
+    errorSpan.style.fontSize = "13px";
+    input.parentNode.appendChild(errorSpan);
+  }
+
+  errorSpan.textContent = message;
+};
+
+form.addEventListener("submit", function(e){
+
+  e.preventDefault();
+  clearErrors();
+
+  const name = form.querySelector('[name="name"]');
+  const email = form.querySelector('[name="email"]');
+  const message = form.querySelector('[name="message"]');
+
+  let isValid = true;
+
+  if (!name.value.trim()) {
+    showError(name, "Name is required.");
+    isValid = false;
+  }
+
+  if (!email.value.trim() || !/\S+@\S+\.\S+/.test(email.value)) {
+    showError(email, "Enter a valid email.");
+    isValid = false;
+  }
+
+  if (!message.value.trim()) {
+    showError(message, "Message cannot be empty.");
+    isValid = false;
+  }
+
+  if (!isValid) return;
+
+  // ✅ Disable button to prevent spam clicks
+  button.disabled = true;
+  button.innerText = "Sending...";
+
+  emailjs.sendForm(
+    "service_dhlqq6e",
+    "template_8ri1x28",
+    form
+  )
+  .then(() => {
+
+    showFormMessage(
+      "✅ Message sent successfully! I will get back to you soon.",
+      "limegreen"
+    );
+
+    form.reset();
+
+    button.disabled = false;
+    button.innerText = "Send Message 🚀";
+
+  })
+  .catch((error) => {
+
+    showFormMessage(
+      "❌ Something went wrong. Please email me directly at koushikshet2401@gmail.com",
+      "red"
+    );
+
+    button.disabled = false;
+    button.innerText = "Send Message 🚀";
+
+    console.log("EmailJS Error:", error);
+  });
+
+});
+
+
+
+
 
   // ===== 4. WHATSAPP REDIRECT =====
   const phoneSection = document.querySelector(".phone-number"); 
