@@ -4,10 +4,13 @@
 
 // ========== LENIS SMOOTH SCROLL ==========
 const lenis = new Lenis({
-    duration: 1.5,
+    duration: 1.2,
     easing: (t) => Math.min(1, 1.001 - Math.pow(2, -10 * t)),
     smooth: true,
     smoothTouch: false,
+    wheelMultiplier: 1,
+    touchMultiplier: 2,
+    infinite: false,
 });
 
 function raf(time) {
@@ -16,6 +19,15 @@ function raf(time) {
 }
 
 requestAnimationFrame(raf);
+
+// Stop Lenis on wheel events to prevent conflicts
+let isScrolling;
+window.addEventListener('wheel', () => {
+    clearTimeout(isScrolling);
+    isScrolling = setTimeout(() => {
+        lenis.start();
+    }, 100);
+}, { passive: true });
 
 // ========== THEME TOGGLE ==========
 const themeToggle = document.getElementById('themeToggle');
@@ -57,12 +69,12 @@ function initThreeJS() {
 
     // Create particles
     const particlesGeometry = new THREE.BufferGeometry();
-    const particlesCount = 500;
+    const particlesCount = window.innerWidth > 768 ? 200 : 100; // Reduced from 500
     const posArray = new Float32Array(particlesCount * 3);
     const colorArray = new Float32Array(particlesCount * 3);
 
     for (let i = 0; i < particlesCount * 3; i++) {
-        posArray[i] = (Math.random() - 0.5) * 50;
+        posArray[i] = (Math.random() - 0.5) * 40; // Reduced spread
         colorArray[i] = Math.random();
     }
 
@@ -70,10 +82,10 @@ function initThreeJS() {
     particlesGeometry.setAttribute('color', new THREE.BufferAttribute(colorArray, 3));
 
     const particlesMaterial = new THREE.PointsMaterial({
-        size: 0.15,
+        size: 0.1, // Reduced from 0.15
         vertexColors: true,
         transparent: true,
-        opacity: 0.8,
+        opacity: 0.6, // Reduced from 0.8
         blending: THREE.AdditiveBlending,
     });
 
@@ -82,26 +94,26 @@ function initThreeJS() {
 
     // Create geometric shapes
     const geometries = [
-        new THREE.TetrahedronGeometry(1),
-        new THREE.OctahedronGeometry(1),
-        new THREE.IcosahedronGeometry(1),
-        new THREE.TorusGeometry(1, 0.4, 16, 100),
+        new THREE.TetrahedronGeometry(0.8), // Reduced size
+        new THREE.OctahedronGeometry(0.8),
+        new THREE.IcosahedronGeometry(0.8),
+        new THREE.TorusGeometry(0.8, 0.3, 16, 100),
     ];
 
     const shapes = [];
-    for (let i = 0; i < 15; i++) {
+    for (let i = 0; i < 8; i++) { // Reduced from 15 to 8
         const geometry = geometries[Math.floor(Math.random() * geometries.length)];
         const material = new THREE.MeshBasicMaterial({
             color: Math.random() * 0xffffff,
             wireframe: true,
             transparent: true,
-            opacity: 0.2,
+            opacity: 0.15, // Reduced from 0.2
         });
         const mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(
-            (Math.random() - 0.5) * 30,
-            (Math.random() - 0.5) * 30,
-            (Math.random() - 0.5) * 30
+            (Math.random() - 0.5) * 25, // Reduced spread
+            (Math.random() - 0.5) * 25,
+            (Math.random() - 0.5) * 20
         );
         mesh.rotation.set(
             Math.random() * Math.PI,
@@ -111,9 +123,9 @@ function initThreeJS() {
         shapes.push({
             mesh: mesh,
             rotationSpeed: {
-                x: (Math.random() - 0.5) * 0.02,
-                y: (Math.random() - 0.5) * 0.02,
-                z: (Math.random() - 0.5) * 0.02,
+                x: (Math.random() - 0.5) * 0.01, // Reduced speed
+                y: (Math.random() - 0.5) * 0.01,
+                z: (Math.random() - 0.5) * 0.01,
             }
         });
         scene.add(mesh);
@@ -122,36 +134,50 @@ function initThreeJS() {
     // Mouse interaction
     let mouseX = 0;
     let mouseY = 0;
+    let targetMouseX = 0;
+    let targetMouseY = 0;
 
     document.addEventListener('mousemove', (event) => {
-        mouseX = (event.clientX / window.innerWidth) * 2 - 1;
-        mouseY = -(event.clientY / window.innerHeight) * 2 + 1;
+        targetMouseX = (event.clientX / window.innerWidth) * 2 - 1;
+        targetMouseY = -(event.clientY / window.innerHeight) * 2 + 1;
     });
 
     // Animation
     const clock = new THREE.Clock();
+    let frameCount = 0;
 
     function animate() {
         requestAnimationFrame(animate);
+        frameCount++;
+        
+        // Skip every other frame for better performance
+        if (frameCount % 2 !== 0) return;
+        
         const elapsedTime = clock.getElapsedTime();
 
-        // Rotate particles
-        particlesMesh.rotation.y = elapsedTime * 0.05;
-        particlesMesh.rotation.x = Math.sin(elapsedTime * 0.1) * 0.2;
+        // Smooth mouse interpolation
+        mouseX += (targetMouseX - mouseX) * 0.02;
+        mouseY += (targetMouseY - mouseY) * 0.02;
 
-        // Animate shapes
+        // Rotate particles slower
+        particlesMesh.rotation.y = elapsedTime * 0.03;
+        particlesMesh.rotation.x = Math.sin(elapsedTime * 0.05) * 0.1;
+
+        // Animate shapes (reduced complexity)
         shapes.forEach((shape, index) => {
             shape.mesh.rotation.x += shape.rotationSpeed.x;
             shape.mesh.rotation.y += shape.rotationSpeed.y;
             shape.mesh.rotation.z += shape.rotationSpeed.z;
 
-            // Floating animation
-            shape.mesh.position.y += Math.sin(elapsedTime + index) * 0.01;
+            // Floating animation (every 4th shape only)
+            if (index % 4 === 0) {
+                shape.mesh.position.y += Math.sin(elapsedTime + index) * 0.005;
+            }
         });
 
-        // Mouse interaction
-        camera.position.x += (mouseX * 2 - camera.position.x) * 0.05;
-        camera.position.y += (mouseY * 2 - camera.position.y) * 0.05;
+        // Reduced mouse interaction
+        camera.position.x += (mouseX * 1.5 - camera.position.x) * 0.02;
+        camera.position.y += (mouseY * 1.5 - camera.position.y) * 0.02;
         camera.lookAt(scene.position);
 
         renderer.render(scene, camera);
@@ -312,9 +338,22 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-// ========== PROJECT CARDS PARALLAX ==========
+// ========== PROJECT CARDS PARALLAX (OPTIMIZED) ==========
 document.querySelectorAll('.project-card').forEach((card) => {
+    let isHovering = false;
+    
+    card.addEventListener('mouseenter', () => {
+        isHovering = true;
+    });
+    
+    card.addEventListener('mouseleave', () => {
+        isHovering = false;
+        card.style.transform = '';
+    });
+    
     card.addEventListener('mousemove', (e) => {
+        if (!isHovering) return;
+        
         const rect = card.getBoundingClientRect();
         const x = e.clientX - rect.left;
         const y = e.clientY - rect.top;
@@ -322,14 +361,12 @@ document.querySelectorAll('.project-card').forEach((card) => {
         const centerX = rect.width / 2;
         const centerY = rect.height / 2;
 
-        const rotateX = (y - centerY) / 10;
-        const rotateY = (centerX - x) / 10;
+        const rotateX = ((y - centerY) / 10) * 0.5; // Reduced intensity
+        const rotateY = ((centerX - x) / 10) * 0.5;
 
-        card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-15px) scale(1.02)`;
-    });
-
-    card.addEventListener('mouseleave', () => {
-        card.style.transform = '';
+        requestAnimationFrame(() => {
+            card.style.transform = `perspective(1000px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-15px) scale(1.02)`;
+        });
     });
 });
 
@@ -383,22 +420,28 @@ const createCursorTrail = () => {
 
 // createCursorTrail(); // Uncomment for cursor trail
 
-// ========== PARTICLE TEXT EFFECT ==========
+// ========== PARTICLE TEXT EFFECT (OPTIMIZED) ==========
 const createParticleText = () => {
     const titles = document.querySelectorAll('.section-title');
+    let lastTrigger = 0;
 
     titles.forEach((title) => {
         title.addEventListener('mouseenter', () => {
+            // Throttle effect to once per 2 seconds
+            const now = Date.now();
+            if (now - lastTrigger < 2000) return;
+            lastTrigger = now;
+            
             const rect = title.getBoundingClientRect();
-            const particleCount = 30;
+            const particleCount = 15; // Reduced from 30
 
             for (let i = 0; i < particleCount; i++) {
                 const particle = document.createElement('div');
-                particle.style.position = 'absolute';
+                particle.style.position = 'fixed'; // Changed from absolute
                 particle.style.left = rect.left + Math.random() * rect.width + 'px';
                 particle.style.top = rect.top + Math.random() * rect.height + 'px';
-                particle.style.width = '4px';
-                particle.style.height = '4px';
+                particle.style.width = '3px'; // Reduced from 4px
+                particle.style.height = '3px';
                 particle.style.background = 'var(--accent-primary)';
                 particle.style.borderRadius = '50%';
                 particle.style.pointerEvents = 'none';
@@ -407,7 +450,7 @@ const createParticleText = () => {
                 document.body.appendChild(particle);
 
                 const angle = Math.random() * Math.PI * 2;
-                const velocity = 2 + Math.random() * 3;
+                const velocity = 1.5 + Math.random() * 2; // Reduced velocity
                 const vx = Math.cos(angle) * velocity;
                 const vy = Math.sin(angle) * velocity;
 
@@ -418,7 +461,7 @@ const createParticleText = () => {
                 const animate = () => {
                     x += vx;
                     y += vy;
-                    opacity -= 0.02;
+                    opacity -= 0.03; // Faster fade
 
                     particle.style.left = x + 'px';
                     particle.style.top = y + 'px';
@@ -427,7 +470,9 @@ const createParticleText = () => {
                     if (opacity > 0) {
                         requestAnimationFrame(animate);
                     } else {
-                        document.body.removeChild(particle);
+                        if (document.body.contains(particle)) {
+                            document.body.removeChild(particle);
+                        }
                     }
                 };
 
@@ -437,7 +482,10 @@ const createParticleText = () => {
     });
 };
 
-createParticleText();
+// Only create particle text on desktop
+if (window.innerWidth > 768) {
+    createParticleText();
+}
 
 // ========== EMAILJS FORM SUBMISSION ==========
 (function () {
@@ -550,7 +598,19 @@ if (contactForm) {
 }
 
 // ========== PERFORMANCE OPTIMIZATION ==========
-// Reduce animations on mobile
+// Reduce animations on mobile and during scroll
+let isUserScrolling = false;
+let scrollTimeout;
+
+window.addEventListener('scroll', () => {
+    isUserScrolling = true;
+    clearTimeout(scrollTimeout);
+    
+    scrollTimeout = setTimeout(() => {
+        isUserScrolling = false;
+    }, 150);
+}, { passive: true });
+
 if (window.innerWidth < 768) {
     const canvas = document.getElementById('bg-canvas');
     if (canvas) {
@@ -558,8 +618,17 @@ if (window.innerWidth < 768) {
     }
 }
 
+// Disable particle explosions on slower devices
+const isSlow = navigator.hardwareConcurrency && navigator.hardwareConcurrency < 4;
+if (isSlow) {
+    console.log('Low-end device detected, reducing effects');
+}
+
 // ========== RANDOM BACKGROUND COLOR SHIFT ==========
 setInterval(() => {
+    // Don't shift colors while scrolling for better performance
+    if (isUserScrolling) return;
+    
     const currentTheme = html.getAttribute('data-theme');
     const heroAnimation = document.querySelector('.hero-bg-animation');
     
