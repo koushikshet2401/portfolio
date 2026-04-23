@@ -55,7 +55,9 @@
 html {
     scroll-behavior: smooth;
     overflow-x: hidden;
-    overflow-y: auto; /* Ensure vertical scroll works */
+    overflow-y: scroll; /* Force scrollbar to prevent layout shift */
+    /* Smooth native scrolling */
+    scroll-padding-top: 80px;
 }
 
 body {
@@ -64,14 +66,15 @@ body {
     color: var(--text-primary);
     line-height: 1.6;
     overflow-x: hidden;
-    overflow-y: auto; /* Ensure vertical scroll works */
     transition: background 0.5s ease, color 0.5s ease;
     min-height: 100vh;
     position: relative;
+    /* Better scroll performance */
+    -webkit-overflow-scrolling: touch;
 }
 
 /* ====================================================================================
-   ANIMATED BACKGROUND CANVAS
+   ANIMATED BACKGROUND CANVAS (BRIGHT & VISIBLE)
    ==================================================================================== */
 
 #bg-canvas {
@@ -82,7 +85,17 @@ body {
     height: 100%;
     z-index: 0;
     pointer-events: none;
-    opacity: 0.6;
+    opacity: 0.9; /* Much brighter! */
+    transform: translateZ(0);
+    will-change: opacity;
+    transition: opacity 0.3s ease;
+}
+
+/* Make canvas even brighter on mobile */
+@media (max-width: 768px) {
+    #bg-canvas {
+        opacity: 1; /* Full brightness on mobile */
+    }
 }
 
 /* ====================================================================================
