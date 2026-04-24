@@ -106,7 +106,7 @@ function getStaticProjects() {
       id: '2',
       title: 'Hospital Management System',
       description: 'Comprehensive healthcare management solution with appointment scheduling and patient records.',
-      image: '/imgs/hospital_management.jpeg',
+      image: '/imgs/medicalReport.jpg',
       githubLink: 'https://github.com/koushikshet2401/Medi-flow',
       liveLink: '',
       technologies: ['MERN', 'Stripe', 'Clerk']
@@ -115,7 +115,7 @@ function getStaticProjects() {
       id: '3',
       title: 'Real Estate Showcase',
       description: 'Modern real estate platform with interactive property listings and virtual tours.',
-      image: '/imgs/real_estate.jpeg',
+      image: '/imgs/wht.jpeg',
       githubLink: 'https://github.com/koushikshet2401/real-estate-shocase',
       liveLink: 'https://real-estate-shocase.vercel.app',
       technologies: ['React', 'MongoDB', 'Node.js']
@@ -124,7 +124,7 @@ function getStaticProjects() {
       id: '4',
       title: 'Hostel Management',
       description: 'Complete hostel administration system with room allocation and student management.',
-      image: '/imgs/hostel_management.jpeg',
+      image: '/imgs/enqSystem.png',
       githubLink: 'https://github.com/koushikshet2401/hostel-management',
       liveLink: '',
       technologies: ['MERN', 'Express', 'MongoDB']
@@ -133,7 +133,7 @@ function getStaticProjects() {
       id: '5',
       title: 'Portfolio Website',
       description: 'Personal portfolio showcasing projects, skills, and professional experience.',
-      image: '/imgs/portfolio.jpeg',
+      image: '/imgs/gibliii.png',
       githubLink: 'https://github.com/koushikshet2401/portfolio',
       liveLink: 'https://koushikshet.vercel.app',
       technologies: ['HTML', 'CSS', 'JavaScript']
