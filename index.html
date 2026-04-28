@@ -3,36 +3,34 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Koushik Shet - Modern Full Stack Developer Portfolio">
+    <meta name="description" content="Koushik Shet - Full Stack Developer Portfolio">
     <title>Koushik Shet | Full Stack Developer</title>
     
     <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     
     <!-- Stylesheet -->
-    <link rel="stylesheet" href="style1.css">
+    <link rel="stylesheet" href="navy-style.css">
 </head>
 <body>
 
-    <!-- Animated Background Canvas -->
-    <canvas id="bg-canvas"></canvas>
-
-    <!-- Theme Toggle Button -->
-    <div class="theme-toggle" id="themeToggle">
-        <i class="fas fa-moon"></i>
-        <i class="fas fa-sun"></i>
+    <!-- Parallax Background Layers -->
+    <div class="parallax-bg">
+        <div class="parallax-layer layer-1"></div>
+        <div class="parallax-layer layer-2"></div>
+        <div class="parallax-layer layer-3"></div>
     </div>
 
     <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
             <div class="nav-brand">
-                <h1 class="glitch" data-text="KS">KS</h1>
+                <h1>KS</h1>
             </div>
             <div class="nav-menu" id="navMenu">
                 <a href="#home" class="nav-link">Home</a>
@@ -51,38 +49,25 @@
         </div>
     </nav>
 
-    <!-- Hero Section -->
+    <!-- Hero Section - Asymmetric -->
     <section id="home" class="hero">
-        <div class="hero-bg-animation"></div>
         <div class="container">
-            <div class="hero-content">
-                <div class="hero-text">
-                    <div class="hero-label animate-slide-up">
+            <div class="hero-grid">
+                <div class="hero-content">
+                    <div class="hero-badge">
                         <span class="pulse-dot"></span>
                         Available for opportunities
                     </div>
                     <h1 class="hero-title">
-                        <span class="line animate-slide-up">Hi, I'm</span>
-                        <span class="line animate-slide-up gradient-text typing-effect">Koushik Shet</span>
+                        <span class="line">Koushik</span>
+                        <span class="line">Shet</span>
                     </h1>
-                    <p class="hero-subtitle animate-slide-up">
-                        Full Stack Developer | MERN Stack Specialist
+                    <p class="hero-subtitle">Full Stack Developer<br>MERN Stack Specialist</p>
+                    <p class="hero-description">
+                        Building exceptional digital experiences with modern technologies.
+                        Specializing in scalable web applications and creative solutions.
                     </p>
-                    <div class="hero-stats animate-slide-up">
-                        <div class="stat-item">
-                            <span class="stat-num counter" data-target="5">0</span>
-                            <span class="stat-label">Projects</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-num counter" data-target="2">0</span>
-                            <span class="stat-label">Internships</span>
-                        </div>
-                        <div class="stat-item">
-                            <span class="stat-num counter" data-target="100">0</span>
-                            <span class="stat-label">Efficiency</span>
-                        </div>
-                    </div>
-                    <div class="hero-buttons animate-slide-up">
+                    <div class="hero-buttons">
                         <a href="resume/Koushik_shet_CV_02.pdf" class="btn btn-primary" target="_blank">
                             <span>Download Resume</span>
                             <i class="fas fa-download"></i>
@@ -93,54 +78,62 @@
                         </a>
                     </div>
                 </div>
-                <div class="hero-image animate-fade-in">
-                    <div class="profile-container">
-                        <div class="profile-ring"></div>
-                        <div class="profile-ring"></div>
-                        <img src="./imgs/gib.jpg" alt="Koushik Shet" class="profile-img">
+                
+                <div class="hero-stats-card">
+                    <div class="stat-box">
+                        <span class="stat-number counter" data-target="5">0</span>
+                        <span class="stat-label">Projects</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number counter" data-target="2">0</span>
+                        <span class="stat-label">Years</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number counter" data-target="100">0</span>
+                        <span class="stat-label">Efficiency</span>
+                    </div>
+                    <div class="stat-box">
+                        <span class="stat-number">∞</span>
+                        <span class="stat-label">Coffee</span>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="scroll-indicator">
-            <div class="mouse">
-                <div class="wheel"></div>
-            </div>
-        </div>
     </section>
 
-    <!-- About Section -->
+    <!-- About Section - Asymmetric Layout -->
     <section id="about" class="section about">
         <div class="container">
-            <div class="section-header">
-                <span class="section-tag">Get To Know</span>
-                <h2 class="section-title">About Me</h2>
-            </div>
-            <div class="about-content">
-                <div class="about-text">
-                    <p class="lead-text">
-                        I'm a dedicated web developer committed to creating intuitive, scalable digital solutions that blend clean design with thoughtful functionality.
+            <div class="about-grid">
+                <div class="about-left">
+                    <span class="section-tag">Get To Know</span>
+                    <h2 class="section-title">About Me</h2>
+                    <p class="about-text">
+                        I'm a dedicated web developer committed to creating intuitive, scalable digital solutions.
+                        With expertise in the MERN stack, I design seamless user experiences and write efficient code.
                     </p>
-                    <p>
-                        I approach every project with precision, empathy, and a creative mindset that transforms code into meaningful user experiences.
+                    <p class="about-text">
+                        I approach every project with precision, empathy, and a creative mindset that transforms
+                        code into meaningful user experiences.
                     </p>
                 </div>
+                
                 <div class="about-cards">
-                    <div class="about-card" data-tilt>
+                    <div class="about-card">
                         <div class="card-icon">
                             <i class="fas fa-code"></i>
                         </div>
                         <h3>Clean Code</h3>
                         <p>Writing maintainable, scalable code with best practices</p>
                     </div>
-                    <div class="about-card" data-tilt>
+                    <div class="about-card">
                         <div class="card-icon">
                             <i class="fas fa-rocket"></i>
                         </div>
                         <h3>Fast Delivery</h3>
                         <p>Delivering projects on time with quality assurance</p>
                     </div>
-                    <div class="about-card" data-tilt>
+                    <div class="about-card">
                         <div class="card-icon">
                             <i class="fas fa-lightbulb"></i>
                         </div>
@@ -159,83 +152,38 @@
                 <span class="section-tag">My Expertise</span>
                 <h2 class="section-title">Technical Skills</h2>
             </div>
-            <div class="skills-wrapper">
+            
+            <div class="skills-grid">
                 <div class="skill-category">
-                    <h3 class="category-title">
-                        <i class="fas fa-palette"></i>
-                        Frontend Development
-                    </h3>
+                    <h3><i class="fas fa-palette"></i> Frontend</h3>
                     <div class="skill-items">
-                        <div class="skill-badge">
-                            <i class="fab fa-html5"></i>
-                            <span>HTML5</span>
-                        </div>
-                        <div class="skill-badge">
-                            <i class="fab fa-css3-alt"></i>
-                            <span>CSS3</span>
-                        </div>
-                        <div class="skill-badge">
-                            <i class="fab fa-js"></i>
-                            <span>JavaScript</span>
-                        </div>
-                        <div class="skill-badge">
-                            <i class="fab fa-react"></i>
-                            <span>React</span>
-                        </div>
-                        <div class="skill-badge">
-                            <i class="fas fa-wind"></i>
-                            <span>Tailwind CSS</span>
-                        </div>
-                        <div class="skill-badge">
-                            <i class="fab fa-bootstrap"></i>
-                            <span>Bootstrap</span>
-                        </div>
+                        <span>HTML5</span>
+                        <span>CSS3</span>
+                        <span>JavaScript</span>
+                        <span>React</span>
+                        <span>Next.js</span>
+                        <span>Tailwind CSS</span>
                     </div>
                 </div>
-
+                
                 <div class="skill-category">
-                    <h3 class="category-title">
-                        <i class="fas fa-server"></i>
-                        Backend Development
-                    </h3>
+                    <h3><i class="fas fa-server"></i> Backend</h3>
                     <div class="skill-items">
-                        <div class="skill-badge">
-                            <i class="fab fa-node-js"></i>
-                            <span>Node.js</span>
-                        </div>
-                        <div class="skill-badge">
-                            <i class="fas fa-server"></i>
-                            <span>Express.js</span>
-                        </div>
-                        <div class="skill-badge">
-                            <i class="fas fa-database"></i>
-                            <span>MongoDB</span>
-                        </div>
-                        <div class="skill-badge">
-                            <i class="fas fa-database"></i>
-                            <span>SQL</span>
-                        </div>
+                        <span>Node.js</span>
+                        <span>Express.js</span>
+                        <span>MongoDB</span>
+                        <span>MySQL</span>
+                        <span>REST APIs</span>
                     </div>
                 </div>
-
+                
                 <div class="skill-category">
-                    <h3 class="category-title">
-                        <i class="fas fa-tools"></i>
-                        Languages & Tools
-                    </h3>
+                    <h3><i class="fas fa-tools"></i> Tools</h3>
                     <div class="skill-items">
-                        <div class="skill-badge">
-                            <i class="fab fa-python"></i>
-                            <span>Python</span>
-                        </div>
-                        <div class="skill-badge">
-                            <i class="fab fa-java"></i>
-                            <span>Java</span>
-                        </div>
-                        <div class="skill-badge">
-                            <i class="fab fa-git-alt"></i>
-                            <span>Git/GitHub</span>
-                        </div>
+                        <span>Git/GitHub</span>
+                        <span>VS Code</span>
+                        <span>Postman</span>
+                        <span>Figma</span>
                     </div>
                 </div>
             </div>
@@ -247,35 +195,37 @@
         <div class="container">
             <div class="section-header">
                 <span class="section-tag">Career Journey</span>
-                <h2 class="section-title">Professional Experience</h2>
+                <h2 class="section-title">Experience</h2>
             </div>
+            
             <div class="timeline">
-                <div class="timeline-item" data-aos="fade-right">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card">
-                        <div class="timeline-date">2026</div>
+                <div class="timeline-item left">
+                    <div class="timeline-content">
+                        <span class="timeline-date">2026</span>
                         <h3>AI Intern</h3>
                         <h4>FRIHBI Enterprises Pvt Ltd</h4>
                         <p>
-                            Worked on a live POS application, enhancing backend logic and transaction workflows. Implemented GST and tax calculation logic for billing and financial records. Improved data validation and enhanced payment processing flows. Utilized Node.js, Express.js, MongoDB, and Git/GitHub.
+                            Worked on live POS application, enhancing backend logic and transaction workflows.
+                            Implemented GST and tax calculation logic for billing and financial records.
                         </p>
-                        <div class="timeline-tags">
+                        <div class="tags">
                             <span>Node.js</span>
                             <span>MongoDB</span>
                             <span>POS System</span>
                         </div>
                     </div>
                 </div>
-                <div class="timeline-item" data-aos="fade-left">
-                    <div class="timeline-dot"></div>
-                    <div class="timeline-card">
-                        <div class="timeline-date">2025</div>
+                
+                <div class="timeline-item right">
+                    <div class="timeline-content">
+                        <span class="timeline-date">2025</span>
                         <h3>Web Development Intern</h3>
                         <h4>Code Craft</h4>
                         <p>
-                            Contributed to responsive web applications by designing modern UI components. Built dynamic features using HTML, CSS, and JavaScript. Optimized website performance and maintained clean, scalable code. Gained practical experience in agile environment and code reviews.
+                            Contributed to responsive web applications by designing modern UI components.
+                            Built dynamic features using HTML, CSS, and JavaScript.
                         </p>
-                        <div class="timeline-tags">
+                        <div class="tags">
                             <span>HTML/CSS</span>
                             <span>JavaScript</span>
                             <span>UI/UX</span>
@@ -286,115 +236,91 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
+    <!-- Projects Section - Asymmetric Grid -->
     <section id="projects" class="section projects">
         <div class="container">
             <div class="section-header">
                 <span class="section-tag">Portfolio</span>
                 <h2 class="section-title">Featured Projects</h2>
             </div>
-            <div class="projects-grid">
-                
-                <div class="project-card" data-tilt>
-                    <div class="project-image">
-                        <img src="imgs/ai_interview_platform.jpeg" alt="AI Interview Platform">
-                        <div class="project-overlay">
-                            <a href="https://github.com/koushikshet2401/ai-mock-interview-site" target="_blank" class="project-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </div>
-                    </div>
+            
+            <div class="projects-wrapper">
+                <div class="project-card large">
+                    <div class="project-number">01</div>
                     <div class="project-content">
-                        <h3>AI-powered Interview Platform</h3>
-                        <p>Practice interviews, analyze performance, and improve skills with AI-powered platform.</p>
-                        <div class="project-tech">
+                        <h3>AI Interview Platform</h3>
+                        <p>Practice interviews, analyze performance with AI-powered platform</p>
+                        <div class="project-tags">
                             <span>React</span>
                             <span>AI</span>
                             <span>MERN</span>
                         </div>
+                        <a href="https://github.com/koushikshet2401/ai-mock-interview-site" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i>
+                        </a>
                     </div>
                 </div>
-
-                <div class="project-card" data-tilt>
-                    <div class="project-image">
-                        <img src="https://nextgeninvent.com/wp-content/uploads/2024/05/Healthcare-Management-System.jpg" alt="Hospital Management">
-                        <div class="project-overlay">
-                            <a href="https://github.com/koushikshet2401/Medi-Flow" target="_blank" class="project-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </div>
-                    </div>
+                
+                <div class="project-card">
+                    <div class="project-number">02</div>
                     <div class="project-content">
-                        <h3>Hospital Management System</h3>
-                        <p>Full-stack system to manage patients, appointments, doctors, and medical records efficiently.</p>
-                        <div class="project-tech">
+                        <h3>Hospital Management</h3>
+                        <p>Full-stack healthcare solution</p>
+                        <div class="project-tags">
                             <span>MERN</span>
-                            <span>Healthcare</span>
-                            <span>Full-stack</span>
+                            <span>Stripe</span>
                         </div>
+                        <a href="https://github.com/koushikshet2401/Medi-Flow" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i>
+                        </a>
                     </div>
                 </div>
-
-                <div class="project-card" data-tilt>
-                    <div class="project-image">
-                        <img src="https://img.freepik.com/free-vector/whatsapp-chat-concept-illustration_114360-2170.jpg" alt="WhatsApp Ticket System">
-                        <div class="project-overlay">
-                            <a href="https://github.com/koushikshet2401/WhatsApp-Ticketing-Management-System" target="_blank" class="project-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </div>
-                    </div>
+                
+                <div class="project-card">
+                    <div class="project-number">03</div>
                     <div class="project-content">
-                        <h3>WhatsApp Ticket Management</h3>
-                        <p>Support system integrating WhatsApp to create, track, and manage user queries as tickets.</p>
-                        <div class="project-tech">
+                        <h3>WhatsApp Ticketing</h3>
+                        <p>Real-time support system</p>
+                        <div class="project-tags">
                             <span>Node.js</span>
                             <span>WhatsApp API</span>
-                            <span>Real-time</span>
                         </div>
+                        <a href="https://github.com/koushikshet2401/WhatsApp-Ticketing-Management-System" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i>
+                        </a>
                     </div>
                 </div>
-
-                <div class="project-card" data-tilt>
-                    <div class="project-image">
-                        <img src="./imgs/AI-plt.png" alt="AI Chat Platform">
-                        <div class="project-overlay">
-                            <a href="https://github.com/koushikshet2401/AI-BOT" target="_blank" class="project-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </div>
-                    </div>
+                
+                <div class="project-card">
+                    <div class="project-number">04</div>
                     <div class="project-content">
                         <h3>AI Chat Platform</h3>
-                        <p>MERN + Generative AI app with real-time chat and admin analytics dashboard.</p>
-                        <div class="project-tech">
+                        <p>MERN + Generative AI app</p>
+                        <div class="project-tags">
                             <span>MERN</span>
                             <span>AI</span>
-                            <span>Real-time</span>
                         </div>
+                        <a href="https://github.com/koushikshet2401/AI-BOT" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i>
+                        </a>
                     </div>
                 </div>
-
-                <div class="project-card" data-tilt>
-                    <div class="project-image">
-                        <img src="https://tse3.mm.bing.net/th/id/OIP.Q_CkILKkvgBSii1imR0JJAHaEK?pid=Api&P=0&h=220" alt="AI Chrome Extension">
-                        <div class="project-overlay">
-                            <a href="https://github.com/koushikshet2401/ai-chrome-extension" target="_blank" class="project-link">
-                                <i class="fab fa-github"></i>
-                            </a>
-                        </div>
-                    </div>
+                
+                <div class="project-card large">
+                    <div class="project-number">05</div>
                     <div class="project-content">
                         <h3>AI Chrome Extension</h3>
-                        <p>Smart Chrome extension powered by AI to enhance productivity and provide quick insights.</p>
-                        <div class="project-tech">
+                        <p>Smart productivity enhancer powered by AI</p>
+                        <div class="project-tags">
                             <span>JavaScript</span>
                             <span>Chrome API</span>
                             <span>AI</span>
                         </div>
+                        <a href="https://github.com/koushikshet2401/ai-chrome-extension" target="_blank" class="project-link">
+                            <i class="fab fa-github"></i>
+                        </a>
                     </div>
                 </div>
-
             </div>
         </div>
     </section>
@@ -406,9 +332,9 @@
                 <span class="section-tag">Achievements</span>
                 <h2 class="section-title">Certifications</h2>
             </div>
-            <div class="certificates-grid">
-                
-                <a href="./certificates/certificate-alpha-plus-batch-40-679cae7ac17cccfc8e0f1134.pdf" target="_blank" class="certificate-card">
+            
+            <div class="certs-grid">
+                <a href="./certificates/certificate-alpha-plus-batch-40-679cae7ac17cccfc8e0f1134.pdf" target="_blank" class="cert-card">
                     <div class="cert-icon">
                         <i class="fab fa-java"></i>
                     </div>
@@ -416,8 +342,8 @@
                     <p>Apna College</p>
                     <span class="cert-year">2024</span>
                 </a>
-
-                <a href="./certificates/gfg full_stack.pdf" target="_blank" class="certificate-card">
+                
+                <a href="./certificates/gfg full_stack.pdf" target="_blank" class="cert-card">
                     <div class="cert-icon">
                         <i class="fas fa-laptop-code"></i>
                     </div>
@@ -425,8 +351,8 @@
                     <p>GeeksForGeeks</p>
                     <span class="cert-year">2025</span>
                 </a>
-
-                <a href="./certificates/gfg160 days.pdf" target="_blank" class="certificate-card">
+                
+                <a href="./certificates/gfg160 days.pdf" target="_blank" class="cert-card">
                     <div class="cert-icon">
                         <i class="fas fa-code"></i>
                     </div>
@@ -434,7 +360,6 @@
                     <p>GeeksForGeeks</p>
                     <span class="cert-year">2025</span>
                 </a>
-
             </div>
         </div>
     </section>
@@ -446,46 +371,39 @@
                 <span class="section-tag">Let's Connect</span>
                 <h2 class="section-title">Get In Touch</h2>
             </div>
-            <div class="contact-content">
+            
+            <div class="contact-wrapper">
                 <div class="contact-info">
-                    <div class="contact-card">
-                        <div class="contact-icon">
-                            <i class="fas fa-envelope"></i>
+                    <div class="info-card">
+                        <i class="fas fa-envelope"></i>
+                        <div>
+                            <h4>Email</h4>
+                            <a href="mailto:Koushikshet2401@gmail.com">Koushikshet2401@gmail.com</a>
                         </div>
-                        <h3>Email</h3>
-                        <a href="mailto:Koushikshet2401@gmail.com">Koushikshet2401@gmail.com</a>
                     </div>
-                    <div class="contact-card">
-                        <div class="contact-icon">
-                            <i class="fas fa-phone"></i>
+                    <div class="info-card">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <div>
+                            <h4>Location</h4>
+                            <p>Karnataka, India</p>
                         </div>
-                        <h3>Phone</h3>
-                        <span>+91 XXXXX XXXXX</span>
                     </div>
-                    <div class="contact-card">
-                        <div class="contact-icon">
-                            <i class="fas fa-map-marker-alt"></i>
+                    <div class="info-card">
+                        <i class="fas fa-briefcase"></i>
+                        <div>
+                            <h4>Status</h4>
+                            <p>Available for Work</p>
                         </div>
-                        <h3>Location</h3>
-                        <span>Karnataka, India</span>
                     </div>
                 </div>
-
+                
                 <form id="contactForm" class="contact-form">
                     <div class="form-row">
-                        <div class="form-group">
-                            <input type="text" name="name" placeholder="Your Name" required>
-                        </div>
-                        <div class="form-group">
-                            <input type="email" name="email" placeholder="Your Email" required>
-                        </div>
+                        <input type="text" name="name" placeholder="Your Name" required>
+                        <input type="email" name="email" placeholder="Your Email" required>
                     </div>
-                    <div class="form-group">
-                        <input type="text" name="subject" placeholder="Subject" required>
-                    </div>
-                    <div class="form-group">
-                        <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
-                    </div>
+                    <input type="text" name="subject" placeholder="Subject" required>
+                    <textarea name="message" placeholder="Your Message" rows="5" required></textarea>
                     <button type="submit" class="btn btn-primary">
                         <span>Send Message</span>
                         <i class="fas fa-paper-plane"></i>
@@ -498,32 +416,27 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="container">
-            <div class="footer-content">
-                <div class="social-links">
-                    <a href="https://www.linkedin.com/in/koushik-shet-7b228a353" target="_blank" class="social-link">
-                        <i class="fab fa-linkedin-in"></i>
-                    </a>
-                    <a href="https://instagram.com/koushikshet.24" target="_blank" class="social-link">
-                        <i class="fab fa-instagram"></i>
-                    </a>
-                    <a href="https://github.com/koushikshet2401" target="_blank" class="social-link">
-                        <i class="fab fa-github"></i>
-                    </a>
-                    <a href="mailto:KoushikShet2401@gmail.com" class="social-link">
-                        <i class="fas fa-envelope"></i>
-                    </a>
-                </div>
-                <p class="footer-text">© 2025 Koushik Shet. Crafted with <i class="fas fa-heart"></i></p>
+            <div class="social-links">
+                <a href="https://www.linkedin.com/in/koushik-shet-7b228a353" target="_blank">
+                    <i class="fab fa-linkedin-in"></i>
+                </a>
+                <a href="https://instagram.com/koushikshet.24" target="_blank">
+                    <i class="fab fa-instagram"></i>
+                </a>
+                <a href="https://github.com/koushikshet2401" target="_blank">
+                    <i class="fab fa-github"></i>
+                </a>
+                <a href="mailto:KoushikShet2401@gmail.com">
+                    <i class="fas fa-envelope"></i>
+                </a>
             </div>
+            <p>© 2025 Koushik Shet. Crafted with <i class="fas fa-heart"></i></p>
         </div>
     </footer>
 
     <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/gh/studio-freight/lenis@1.0.29/bundled/lenis.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
-    <script src="https://unpkg.com/vanilla-tilt@1.8.0/dist/vanilla-tilt.min.js"></script>
-    <script src="script1.js"></script>
+    <script src="navy-script.js"></script>
 
 </body>
 </html>
