@@ -1,21 +1,142 @@
 // ====================================================================================
-// NAVY + WHITE PARALLAX PORTFOLIO - JAVASCRIPT
-// Parallax Scrolling + Counter Animations + EmailJS
+// PORTFOLIO JAVASCRIPT
+// Northern Lights Animation + Theme Toggle + All Interactions
 // ====================================================================================
 
-// ========== PARALLAX SCROLLING ==========
-window.addEventListener('scroll', () => {
-    const scrolled = window.pageYOffset;
+// ========== NORTHERN LIGHTS CANVAS ANIMATION ==========
+class NorthernLights {
+    constructor() {
+        this.canvas = document.getElementById('aurora-canvas');
+        if (!this.canvas) return;
+        
+        this.ctx = this.canvas.getContext('2d');
+        this.waves = [];
+        this.animationFrame = null;
+        
+        this.resize();
+        this.init();
+        this.animate();
+        
+        window.addEventListener('resize', () => this.resize());
+    }
     
-    // Parallax layers - different speeds
-    const layer1 = document.querySelector('.layer-1');
-    const layer2 = document.querySelector('.layer-2');
-    const layer3 = document.querySelector('.layer-3');
+    resize() {
+        this.canvas.width = window.innerWidth;
+        this.canvas.height = window.innerHeight;
+    }
     
-    if (layer1) layer1.style.transform = `translateY(${scrolled * 0.3}px)`;
-    if (layer2) layer2.style.transform = `translateY(${scrolled * 0.5}px)`;
-    if (layer3) layer3.style.transform = `translateY(${scrolled * 0.8}px)`;
-}, { passive: true });
+    init() {
+        // Create 3 gentle aurora waves
+        this.waves = [
+            {
+                y: this.canvas.height * 0.3,
+                amplitude: 40,
+                frequency: 0.02,
+                speed: 0.0015,
+                offset: 0,
+                color: { r: 16, g: 185, b: 129, a: 0.15 } // #10b981
+            },
+            {
+                y: this.canvas.height * 0.5,
+                amplitude: 60,
+                frequency: 0.015,
+                speed: 0.001,
+                offset: Math.PI / 2,
+                color: { r: 20, g: 184, b: 166, a: 0.12 } // #14b8a6
+            },
+            {
+                y: this.canvas.height * 0.7,
+                amplitude: 50,
+                frequency: 0.018,
+                speed: 0.0012,
+                offset: Math.PI,
+                color: { r: 52, g: 211, b: 153, a: 0.1 } // #34d399
+            }
+        ];
+    }
+    
+    drawWave(wave) {
+        this.ctx.beginPath();
+        
+        // Start from left edge
+        this.ctx.moveTo(0, this.canvas.height);
+        
+        // Draw wave curve
+        for (let x = 0; x <= this.canvas.width; x += 10) {
+            const y = wave.y + Math.sin(x * wave.frequency + wave.offset) * wave.amplitude;
+            this.ctx.lineTo(x, y);
+        }
+        
+        // Complete the shape
+        this.ctx.lineTo(this.canvas.width, this.canvas.height);
+        this.ctx.closePath();
+        
+        // Create gradient
+        const gradient = this.ctx.createLinearGradient(0, wave.y - wave.amplitude, 0, this.canvas.height);
+        gradient.addColorStop(0, `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, ${wave.color.a})`);
+        gradient.addColorStop(1, `rgba(${wave.color.r}, ${wave.color.g}, ${wave.color.b}, 0)`);
+        
+        this.ctx.fillStyle = gradient;
+        this.ctx.fill();
+    }
+    
+    animate() {
+        // Clear canvas
+        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+        
+        // Update and draw each wave
+        this.waves.forEach(wave => {
+            wave.offset += wave.speed;
+            this.drawWave(wave);
+        });
+        
+        this.animationFrame = requestAnimationFrame(() => this.animate());
+    }
+    
+    destroy() {
+        if (this.animationFrame) {
+            cancelAnimationFrame(this.animationFrame);
+        }
+    }
+}
+
+// Initialize Northern Lights
+let northernLights = null;
+
+document.addEventListener('DOMContentLoaded', () => {
+    const theme = localStorage.getItem('theme') || 'dark';
+    if (theme === 'dark') {
+        northernLights = new NorthernLights();
+    }
+});
+
+// ========== THEME TOGGLE ==========
+const themeToggle = document.getElementById('themeToggle');
+const html = document.documentElement;
+
+// Set initial theme
+const savedTheme = localStorage.getItem('theme') || 'dark';
+html.setAttribute('data-theme', savedTheme);
+
+themeToggle.addEventListener('click', () => {
+    const currentTheme = html.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    html.setAttribute('data-theme', newTheme);
+    localStorage.setItem('theme', newTheme);
+    
+    // Handle Northern Lights
+    if (newTheme === 'dark') {
+        if (!northernLights) {
+            northernLights = new NorthernLights();
+        }
+    } else {
+        if (northernLights) {
+            northernLights.destroy();
+            northernLights = null;
+        }
+    }
+});
 
 // ========== NAVIGATION SCROLL EFFECT ==========
 const navbar = document.getElementById('navbar');
@@ -47,6 +168,22 @@ if (hamburger && navMenu) {
     });
 }
 
+// ========== SMOOTH SCROLL FOR NAVIGATION LINKS ==========
+document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+    anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        
+        if (target) {
+            const offsetTop = target.offsetTop - 80;
+            window.scrollTo({
+                top: offsetTop,
+                behavior: 'smooth'
+            });
+        }
+    });
+});
+
 // ========== COUNTER ANIMATION ==========
 const counters = document.querySelectorAll('.counter');
 
@@ -55,8 +192,8 @@ const animateCounters = (entries, observer) => {
         if (entry.isIntersecting) {
             const counter = entry.target;
             const target = parseInt(counter.getAttribute('data-target'));
-            const duration = 2000; // 2 seconds
-            const step = target / (duration / 16); // 60fps
+            const duration = 2000;
+            const step = target / (duration / 16);
             let current = 0;
             
             const updateCounter = () => {
@@ -81,22 +218,6 @@ const counterObserver = new IntersectionObserver(animateCounters, {
 
 counters.forEach(counter => counterObserver.observe(counter));
 
-// ========== SMOOTH SCROLL FOR NAVIGATION LINKS ==========
-document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-    anchor.addEventListener('click', function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute('href'));
-        
-        if (target) {
-            const offsetTop = target.offsetTop - 80; // Account for fixed navbar
-            window.scrollTo({
-                top: offsetTop,
-                behavior: 'smooth'
-            });
-        }
-    });
-});
-
 // ========== SCROLL REVEAL ANIMATION ==========
 const observerOptions = {
     threshold: 0.1,
@@ -115,7 +236,7 @@ const fadeInObserver = new IntersectionObserver((entries) => {
 
 document.addEventListener('DOMContentLoaded', () => {
     const animatedElements = document.querySelectorAll(
-        '.about-card, .skill-category, .timeline-item, .project-card, .cert-card, .info-card'
+        '.card, .skill-category, .timeline-item, .project-card, .cert-card, .info-card'
     );
     
     animatedElements.forEach((el) => {
@@ -128,7 +249,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // ========== EMAILJS INTEGRATION ==========
 (function () {
-    emailjs.init('5CuD7K8DVxPtGN4Va'); // Your EmailJS User ID
+    emailjs.init('5CuD7K8DVxPtGN4Va');
 })();
 
 const contactForm = document.getElementById('contactForm');
@@ -151,9 +272,16 @@ if (contactForm) {
         }
         
         msg.textContent = text;
-        msg.style.background = isSuccess ? 'rgba(10, 25, 41, 0.1)' : 'rgba(239, 68, 68, 0.1)';
-        msg.style.color = isSuccess ? '#0a1929' : '#ef4444';
-        msg.style.border = isSuccess ? '1px solid #0a1929' : '1px solid #ef4444';
+        
+        if (isSuccess) {
+            msg.style.background = 'rgba(16, 185, 129, 0.1)';
+            msg.style.color = '#10b981';
+            msg.style.border = '1px solid #10b981';
+        } else {
+            msg.style.background = 'rgba(239, 68, 68, 0.1)';
+            msg.style.color = '#ef4444';
+            msg.style.border = '1px solid #ef4444';
+        }
     };
     
     const clearErrors = () => {
@@ -234,4 +362,4 @@ window.addEventListener('load', () => {
     }, 100);
 });
 
-console.log('🚀 Navy + White Parallax Portfolio Loaded!');
+console.log('🌌 Portfolio Loaded - Dark: Northern Lights | Light: Navy Blue');
