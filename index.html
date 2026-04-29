@@ -3,37 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Koushik Shet - Full Stack Developer Portfolio">
     <title>Koushik Shet | Full Stack Developer</title>
-    
-    <!-- Fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    
-    <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    
-    <!-- Stylesheet -->
     <link rel="stylesheet" href="style1.css">
 </head>
 <body>
-
-    <!-- Northern Lights Canvas (Dark Theme Only) -->
     <canvas id="aurora-canvas"></canvas>
-
-    <!-- Theme Toggle Button -->
-    <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+    
+    <button class="theme-toggle" id="themeToggle">
         <i class="fas fa-sun"></i>
         <i class="fas fa-moon"></i>
     </button>
 
-    <!-- Navigation -->
     <nav class="navbar" id="navbar">
         <div class="nav-container">
-            <div class="nav-brand">
-                <h1>KS</h1>
-            </div>
+            <div class="nav-brand"><h1>KS</h1></div>
             <div class="nav-menu" id="navMenu">
                 <a href="#home" class="nav-link">Home</a>
                 <a href="#about" class="nav-link">About</a>
@@ -44,64 +29,66 @@
                 <a href="#contact" class="nav-link">Contact</a>
             </div>
             <div class="hamburger" id="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
+                <span></span><span></span><span></span>
             </div>
         </div>
     </nav>
 
-    <!-- Hero Section -->
     <section id="home" class="hero">
         <div class="container">
-            <div class="hero-content">
-                <div class="hero-badge">
-                    <span class="pulse-dot"></span>
-                    Available for opportunities
+            <div class="hero-grid">
+                <div class="hero-left">
+                    <div class="hero-badge">
+                        <span class="pulse-dot"></span>
+                        Available for opportunities
+                    </div>
+                    <h1 class="hero-title">
+                        <span class="line">Koushik</span>
+                        <span class="line">Shet</span>
+                    </h1>
+                    <p class="hero-subtitle">Full Stack Developer<br>MERN Stack Specialist</p>
+                    <p class="hero-description">
+                        Building exceptional digital experiences with modern technologies.
+                        Specializing in scalable web applications and creative solutions.
+                    </p>
+                    <div class="hero-buttons">
+                        <a href="resume/Koushik_shet_CV_02.pdf" class="btn btn-primary" target="_blank">
+                            <span>Download Resume</span>
+                            <i class="fas fa-download"></i>
+                        </a>
+                        <a href="#projects" class="btn btn-secondary">
+                            <span>View Projects</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-                <h1 class="hero-title">
-                    <span class="line">Koushik</span>
-                    <span class="line">Shet</span>
-                </h1>
-                <p class="hero-subtitle">Full Stack Developer<br>MERN Stack Specialist</p>
-                <p class="hero-description">
-                    Building exceptional digital experiences with modern technologies.
-                    Specializing in scalable web applications and creative solutions.
-                </p>
-                <div class="hero-buttons">
-                    <a href="resume/Koushik_shet_CV_02.pdf" class="btn btn-primary" target="_blank">
-                        <span>Download Resume</span>
-                        <i class="fas fa-download"></i>
-                    </a>
-                    <a href="#projects" class="btn btn-secondary">
-                        <span>View Projects</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-            </div>
-            
-            <div class="hero-stats">
-                <div class="stat-box">
-                    <span class="stat-number counter" data-target="5">0</span>
-                    <span class="stat-label">Projects</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-number counter" data-target="2">0</span>
-                    <span class="stat-label">Years</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-number counter" data-target="100">0</span>
-                    <span class="stat-label">Quality</span>
-                </div>
-                <div class="stat-box">
-                    <span class="stat-number">∞</span>
-                    <span class="stat-label">Coffee</span>
+                
+                <div class="hero-right">
+                    <div class="profile-container">
+                        <div class="profile-ring"></div>
+                        <div class="profile-ring"></div>
+                        <img src="./imgs/gib.jpg" alt="Koushik Shet" class="profile-img">
+                    </div>
+                    
+                    <div class="hero-stats">
+                        <div class="stat-box">
+                            <span class="stat-number counter" data-target="5">0</span>
+                            <span class="stat-label">Projects</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number counter" data-target="100">0</span>
+                            <span class="stat-label">Quality</span>
+                        </div>
+                        <div class="stat-box">
+                            <span class="stat-number">∞</span>
+                            <span class="stat-label">Coffee</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- About Section -->
     <section id="about" class="section about">
         <div class="container">
             <div class="section-header">
@@ -110,24 +97,18 @@
             </div>
             
             <div class="about-cards">
-                <div class="card">
-                    <div class="card-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
+                <div class="card glass-card">
+                    <div class="card-icon"><i class="fas fa-code"></i></div>
                     <h3>Clean Code</h3>
                     <p>Writing maintainable, scalable code with best practices</p>
                 </div>
-                <div class="card">
-                    <div class="card-icon">
-                        <i class="fas fa-rocket"></i>
-                    </div>
+                <div class="card glass-card">
+                    <div class="card-icon"><i class="fas fa-rocket"></i></div>
                     <h3>Fast Delivery</h3>
                     <p>Delivering projects on time with quality assurance</p>
                 </div>
-                <div class="card">
-                    <div class="card-icon">
-                        <i class="fas fa-lightbulb"></i>
-                    </div>
+                <div class="card glass-card">
+                    <div class="card-icon"><i class="fas fa-lightbulb"></i></div>
                     <h3>Innovation</h3>
                     <p>Always learning and implementing latest technologies</p>
                 </div>
@@ -135,7 +116,6 @@
         </div>
     </section>
 
-    <!-- Skills Section -->
     <section id="skills" class="section skills">
         <div class="container">
             <div class="section-header">
@@ -182,7 +162,6 @@
         </div>
     </section>
 
-    <!-- Experience Section -->
     <section id="experience" class="section experience">
         <div class="container">
             <div class="section-header">
@@ -192,14 +171,12 @@
             
             <div class="timeline">
                 <div class="timeline-item">
+                    <div class="timeline-dot"></div>
                     <div class="timeline-content">
                         <span class="timeline-date">2026</span>
                         <h3>AI Intern</h3>
                         <h4>FRIHBI Enterprises Pvt Ltd</h4>
-                        <p>
-                            Worked on live POS application, enhancing backend logic and transaction workflows.
-                            Implemented GST and tax calculation logic for billing and financial records.
-                        </p>
+                        <p>Worked on live POS application, enhancing backend logic and transaction workflows. Implemented GST and tax calculation logic for billing and financial records.</p>
                         <div class="tags">
                             <span>Node.js</span>
                             <span>MongoDB</span>
@@ -209,14 +186,12 @@
                 </div>
                 
                 <div class="timeline-item">
+                    <div class="timeline-dot"></div>
                     <div class="timeline-content">
                         <span class="timeline-date">2025</span>
                         <h3>Web Development Intern</h3>
                         <h4>Code Craft</h4>
-                        <p>
-                            Contributed to responsive web applications by designing modern UI components.
-                            Built dynamic features using HTML, CSS, and JavaScript.
-                        </p>
+                        <p>Contributed to responsive web applications by designing modern UI components. Built dynamic features using HTML, CSS, and JavaScript.</p>
                         <div class="tags">
                             <span>HTML/CSS</span>
                             <span>JavaScript</span>
@@ -228,7 +203,6 @@
         </div>
     </section>
 
-    <!-- Projects Section -->
     <section id="projects" class="section projects">
         <div class="container">
             <div class="section-header">
@@ -310,7 +284,6 @@
         </div>
     </section>
 
-    <!-- Certificates Section -->
     <section id="certificates" class="section certificates">
         <div class="container">
             <div class="section-header">
@@ -320,27 +293,21 @@
             
             <div class="certs-grid">
                 <a href="./certificates/certificate-alpha-plus-batch-40-679cae7ac17cccfc8e0f1134.pdf" target="_blank" class="cert-card">
-                    <div class="cert-icon">
-                        <i class="fab fa-java"></i>
-                    </div>
+                    <div class="cert-icon"><i class="fab fa-java"></i></div>
                     <h3>Java Programming</h3>
                     <p>Apna College</p>
                     <span class="cert-year">2024</span>
                 </a>
                 
                 <a href="./certificates/gfg full_stack.pdf" target="_blank" class="cert-card">
-                    <div class="cert-icon">
-                        <i class="fas fa-laptop-code"></i>
-                    </div>
+                    <div class="cert-icon"><i class="fas fa-laptop-code"></i></div>
                     <h3>Full Stack Development</h3>
                     <p>GeeksForGeeks</p>
                     <span class="cert-year">2025</span>
                 </a>
                 
                 <a href="./certificates/gfg160 days.pdf" target="_blank" class="cert-card">
-                    <div class="cert-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
+                    <div class="cert-icon"><i class="fas fa-code"></i></div>
                     <h3>GFG 160 Days DSA</h3>
                     <p>GeeksForGeeks</p>
                     <span class="cert-year">2025</span>
@@ -349,7 +316,6 @@
         </div>
     </section>
 
-    <!-- Contact Section -->
     <section id="contact" class="section contact">
         <div class="container">
             <div class="section-header">
@@ -398,30 +364,19 @@
         </div>
     </section>
 
-    <!-- Footer -->
     <footer class="footer">
         <div class="container">
             <div class="social-links">
-                <a href="https://www.linkedin.com/in/koushik-shet-7b228a353" target="_blank">
-                    <i class="fab fa-linkedin-in"></i>
-                </a>
-                <a href="https://instagram.com/koushikshet.24" target="_blank">
-                    <i class="fab fa-instagram"></i>
-                </a>
-                <a href="https://github.com/koushikshet2401" target="_blank">
-                    <i class="fab fa-github"></i>
-                </a>
-                <a href="mailto:KoushikShet2401@gmail.com">
-                    <i class="fas fa-envelope"></i>
-                </a>
+                <a href="https://www.linkedin.com/in/koushik-shet-7b228a353" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://instagram.com/koushikshet.24" target="_blank"><i class="fab fa-instagram"></i></a>
+                <a href="https://github.com/koushikshet2401" target="_blank"><i class="fab fa-github"></i></a>
+                <a href="mailto:KoushikShet2401@gmail.com"><i class="fas fa-envelope"></i></a>
             </div>
             <p>© 2025 Koushik Shet. Crafted with <i class="fas fa-heart"></i></p>
         </div>
     </footer>
 
-    <!-- Scripts -->
     <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
     <script src="script1.js"></script>
-
 </body>
 </html>
