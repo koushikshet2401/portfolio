@@ -1049,9 +1049,10 @@ body {
 
 /* RESPONSIVE */
 @media (max-width: 1024px) {
+    /* Hero grid - keep 2 columns but adjust proportions */
     .hero-grid {
-        grid-template-columns: 1fr;
-        gap: 60px;
+        grid-template-columns: 1.5fr 1fr;
+        gap: 40px;
     }
     
     .about-cards {
@@ -1121,13 +1122,64 @@ body {
         padding: 120px 20px 80px;
     }
     
-    .hero-stats {
-        grid-template-columns: 1fr;
+    /* Mobile: Use display:contents to flatten hero-right */
+    .hero-grid {
+        display: grid;
+        grid-template-columns: 1fr 120px;
+        grid-template-areas: 
+            "text photo"
+            "stats stats";
+        gap: 20px;
+        align-items: start;
     }
     
+    .hero-left {
+        grid-area: text;
+    }
+    
+    /* Flatten hero-right so its children become grid items */
+    .hero-right {
+        display: contents;
+    }
+    
+    /* Profile in top-right */
     .profile-container {
-        width: 250px;
-        height: 250px;
+        grid-area: photo;
+        width: 120px;
+        height: 120px;
+        margin: 0;
+    }
+    
+    /* Stats span full width at bottom */
+    .hero-stats {
+        grid-area: stats;
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 10px;
+        margin-top: 20px;
+    }
+    
+    /* Buttons stack */
+    .hero-buttons {
+        flex-direction: column;
+        width: 100%;
+    }
+    
+    .btn {
+        width: 100%;
+        justify-content: center;
+    }
+    
+    .hero-title {
+        font-size: 2.2rem;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+    }
+    
+    .hero-description {
+        font-size: 0.95rem;
     }
     
     .projects-grid {
@@ -1140,6 +1192,11 @@ body {
     
     .form-row {
         grid-template-columns: 1fr;
+    }
+    
+    /* Project images - smaller on mobile */
+    .project-image {
+        height: 200px;
     }
 }
 
