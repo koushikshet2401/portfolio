@@ -109,6 +109,36 @@ const html = document.documentElement;
 const savedTheme = localStorage.getItem('theme') || 'dark';
 html.setAttribute('data-theme', savedTheme);
 
+// Function to update project images based on theme
+function updateProjectImages(theme) {
+    const projectCards = document.querySelectorAll('.project-card');
+    
+    projectCards.forEach(card => {
+        const img = card.querySelector('.project-screenshot');
+        if (img) {
+            const lightImg = card.getAttribute('data-light-img');
+            const darkImg = card.getAttribute('data-dark-img');
+            
+            // Fade out
+            img.style.opacity = '0';
+            
+            // Wait for fade out, then switch image
+            setTimeout(() => {
+                if (theme === 'light') {
+                    img.src = lightImg;
+                } else {
+                    img.src = darkImg;
+                }
+                // Fade in
+                img.style.opacity = '1';
+            }, 300);
+        }
+    });
+}
+
+// Update images on initial load
+updateProjectImages(savedTheme);
+
 // Toggle theme
 themeToggle.addEventListener('click', () => {
     const currentTheme = html.getAttribute('data-theme');
@@ -116,6 +146,9 @@ themeToggle.addEventListener('click', () => {
     
     html.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
+    
+    // Update project images
+    updateProjectImages(newTheme);
 });
 
 // ============================================
