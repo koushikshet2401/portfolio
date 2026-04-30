@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Koushik Shet | Full Stack Developer</title>
+    <title>Koushik Shet | AI-Focused Backend Developer</title>
     <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;800;900&family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <link rel="stylesheet" href="style1.css">
@@ -12,8 +12,13 @@
     <canvas id="aurora-canvas"></canvas>
     
     <button class="theme-toggle" id="themeToggle">
-        <i class="fas fa-sun"></i>
-        <i class="fas fa-moon"></i>
+        <span class="theme-label">Theme</span>
+        <div class="theme-switch">
+            <div class="theme-slider">
+                <i class="fas fa-moon"></i>
+                <i class="fas fa-sun"></i>
+            </div>
+        </div>
     </button>
 
     <nav class="navbar" id="navbar">
@@ -46,10 +51,9 @@
                         <span class="line">Koushik</span>
                         <span class="line">Shet</span>
                     </h1>
-                    <p class="hero-subtitle">Full Stack Developer<br>MERN Stack Specialist</p>
+                    <p class="hero-subtitle">AI-Focused Backend Developer<br>Node.js & Python Specialist</p>
                     <p class="hero-description">
-                        Building exceptional digital experiences with modern technologies.
-                        Specializing in scalable web applications and creative solutions.
+                        Backend-focused developer specializing in Node.js, Express.js, and MongoDB, with hands-on experience building RESTful APIs and AI-powered applications using RAG and LLM integration. Strong foundation in system design, prompt engineering, and cloud deployment.
                     </p>
                     <div class="hero-buttons">
                         <a href="resume/Koushik_shet_CV_02.pdf" class="btn btn-primary" target="_blank">
@@ -98,19 +102,19 @@
             
             <div class="about-cards">
                 <div class="card glass-card">
+                    <div class="card-icon"><i class="fas fa-brain"></i></div>
+                    <h3>AI Integration</h3>
+                    <p>Specialized in RAG pipelines, prompt engineering, and LLM API integration for intelligent applications</p>
+                </div>
+                <div class="card glass-card">
+                    <div class="card-icon"><i class="fas fa-server"></i></div>
+                    <h3>Backend Systems</h3>
+                    <p>Building robust RESTful APIs with Node.js and Express, focused on scalability and performance</p>
+                </div>
+                <div class="card glass-card">
                     <div class="card-icon"><i class="fas fa-code"></i></div>
-                    <h3>Clean Code</h3>
-                    <p>Writing maintainable, scalable code with best practices</p>
-                </div>
-                <div class="card glass-card">
-                    <div class="card-icon"><i class="fas fa-rocket"></i></div>
-                    <h3>Fast Delivery</h3>
-                    <p>Delivering projects on time with quality assurance</p>
-                </div>
-                <div class="card glass-card">
-                    <div class="card-icon"><i class="fas fa-lightbulb"></i></div>
-                    <h3>Innovation</h3>
-                    <p>Always learning and implementing latest technologies</p>
+                    <h3>Problem Solving</h3>
+                    <p>Strong foundation in data structures, algorithms, and system design principles</p>
                 </div>
             </div>
         </div>
@@ -125,37 +129,37 @@
             
             <div class="skills-grid">
                 <div class="skill-category">
-                    <h3><i class="fas fa-palette"></i> Frontend Development</h3>
-                    <div class="skill-items">
-                        <span>HTML5</span>
-                        <span>CSS3</span>
-                        <span>JavaScript</span>
-                        <span>React</span>
-                        <span>Next.js</span>
-                        <span>Tailwind CSS</span>
-                    </div>
-                </div>
-                
-                <div class="skill-category">
                     <h3><i class="fas fa-server"></i> Backend Development</h3>
                     <div class="skill-items">
                         <span>Node.js</span>
                         <span>Express.js</span>
-                        <span>MongoDB</span>
-                        <span>MySQL</span>
-                        <span>REST APIs</span>
+                        <span>RESTful APIs</span>
+                        <span>Python</span>
+                        <span>JWT Auth</span>
+                        <span>Middleware</span>
                     </div>
                 </div>
                 
                 <div class="skill-category">
-                    <h3><i class="fas fa-tools"></i> Tools & Others</h3>
+                    <h3><i class="fas fa-database"></i> Database & Cloud</h3>
                     <div class="skill-items">
+                        <span>MongoDB</span>
+                        <span>Mongoose</span>
+                        <span>SQL</span>
+                        <span>Azure</span>
+                        <span>Cloudinary</span>
+                    </div>
+                </div>
+                
+                <div class="skill-category">
+                    <h3><i class="fas fa-brain"></i> AI & Tools</h3>
+                    <div class="skill-items">
+                        <span>RAG Pipelines</span>
+                        <span>Prompt Engineering</span>
+                        <span>GPT/Claude APIs</span>
                         <span>Git/GitHub</span>
-                        <span>VS Code</span>
                         <span>Postman</span>
-                        <span>Figma</span>
-                        <span>Python</span>
-                        <span>Java</span>
+                        <span>VS Code</span>
                     </div>
                 </div>
             </div>
@@ -173,10 +177,28 @@
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
-                        <span class="timeline-date">2026</span>
+                        <span class="timeline-date">Mar 2026 - Present</span>
+                        <h3>Web Developer Intern</h3>
+                        <h4>Sash Info Services Pvt Ltd</h4>
+                        <p class="desktop-text">Contributed to improving a document-based AI chatbot for the Indian Institute of Foreign Languages, handling complex institutional queries. Optimized the RAG retrieval pipeline by fine-tuning chunk size, top_k retrieval parameters, and similarity thresholds to significantly enhance response relevance. Implemented robust prompt control logic and intelligent fallback mechanisms to ensure responses remained strictly grounded in document context. Integrated advanced web crawling capabilities to fetch and process external data sources, substantially improving the chatbot's ability to handle dynamic and evolving queries.</p>
+                        <p class="mobile-text">Improved AI chatbot for institutional queries by optimizing RAG pipeline and implementing prompt control. Integrated web crawling for dynamic data processing.</p>
+                        <div class="tags">
+                            <span>Python</span>
+                            <span>RAG</span>
+                            <span>AI APIs</span>
+                            <span>Web Crawling</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="timeline-item">
+                    <div class="timeline-dot"></div>
+                    <div class="timeline-content">
+                        <span class="timeline-date">Dec 2025 - Mar 2026</span>
                         <h3>AI Intern</h3>
                         <h4>FRIHBI Enterprises Pvt Ltd</h4>
-                        <p>Worked on live POS application, enhancing backend logic and transaction workflows. Implemented GST and tax calculation logic for billing and financial records.</p>
+                        <p class="desktop-text">Contributed to backend development of a live Point of Sale (POS) system, significantly improving transaction workflows in a production environment. Implemented and optimized comprehensive GST and tax calculation logic for accurate billing, reporting, and financial record-keeping. Enhanced critical checkout, discount application, and payment processing flows to ensure reliable, error-free transactions under high-volume conditions. Improved data validation mechanisms for employee and customer inputs, ensuring data accuracy and consistency across the entire system.</p>
+                        <p class="mobile-text">Developed backend for live POS system, implementing GST calculations and optimizing checkout flows. Enhanced data validation for reliable transactions.</p>
                         <div class="tags">
                             <span>Node.js</span>
                             <span>MongoDB</span>
@@ -188,14 +210,16 @@
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
-                        <span class="timeline-date">2025</span>
+                        <span class="timeline-date">Aug 2025 - Oct 2025</span>
                         <h3>Web Development Intern</h3>
-                        <h4>Code Craft</h4>
-                        <p>Contributed to responsive web applications by designing modern UI components. Built dynamic features using HTML, CSS, and JavaScript.</p>
+                        <h4>JumpWhere</h4>
+                        <p class="desktop-text">Completed comprehensive internship training covering Internet Fundamentals, Technical Research Skills, Web Architecture, Database & SQL, Programming Fundamentals, Data Structures & Algorithms, Object-Oriented Programming, and Python Programming. Built a strong technical foundation through practical exercises and real-world assignments. Demonstrated dedication and consistency throughout the internship, successfully completing all assigned tasks under professional guidance while developing problem-solving abilities and understanding software development best practices.</p>
+                        <p class="mobile-text">Completed technical training in web fundamentals, databases, DSA, and Python. Built strong foundation through practical exercises and professional guidance.</p>
                         <div class="tags">
                             <span>HTML/CSS</span>
                             <span>JavaScript</span>
-                            <span>UI/UX</span>
+                            <span>SQL</span>
+                            <span>Python</span>
                         </div>
                     </div>
                 </div>
@@ -217,7 +241,7 @@
                     </div>
                     <div class="project-content">
                         <h3>AI Interview Platform</h3>
-                        <p>AI-powered platform for interview practice and performance analysis</p>
+                        <p>AI-powered platform for interview practice with performance analysis and feedback</p>
                         <div class="project-tags">
                             <span>React</span>
                             <span>AI</span>
@@ -235,7 +259,7 @@
                     </div>
                     <div class="project-content">
                         <h3>Hospital Management System</h3>
-                        <p>Full-stack healthcare solution with appointments and billing</p>
+                        <p>Full-stack healthcare solution with appointment scheduling and payment integration</p>
                         <div class="project-tags">
                             <span>MERN</span>
                             <span>Stripe</span>
@@ -253,7 +277,7 @@
                     </div>
                     <div class="project-content">
                         <h3>WhatsApp Ticketing System</h3>
-                        <p>Real-time support system integrating WhatsApp API</p>
+                        <p>Real-time customer support system with WhatsApp API integration</p>
                         <div class="project-tags">
                             <span>Node.js</span>
                             <span>WhatsApp API</span>
@@ -271,7 +295,7 @@
                     </div>
                     <div class="project-content">
                         <h3>AI Chat Platform</h3>
-                        <p>MERN + Generative AI with admin analytics dashboard</p>
+                        <p>MERN stack chatbot with generative AI and admin analytics dashboard</p>
                         <div class="project-tags">
                             <span>MERN</span>
                             <span>AI</span>
@@ -289,7 +313,7 @@
                     </div>
                     <div class="project-content">
                         <h3>AI Chrome Extension</h3>
-                        <p>Smart productivity enhancer powered by AI</p>
+                        <p>Smart productivity enhancer powered by AI capabilities</p>
                         <div class="project-tags">
                             <span>JavaScript</span>
                             <span>Chrome API</span>
