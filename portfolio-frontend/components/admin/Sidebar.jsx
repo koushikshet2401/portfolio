@@ -24,6 +24,7 @@ export default function Sidebar() {
   const navItems = [
     { href: '/admin', icon: 'fas fa-home', label: 'Dashboard' },
     { href: '/admin/projects', icon: 'fas fa-folder', label: 'Projects' },
+    { href: '/admin/internships', icon: 'fas fa-briefcase', label: 'Internships' },
     { href: '/admin/messages', icon: 'fas fa-envelope', label: 'Messages' },
     { href: '/admin/profile', icon: 'fas fa-user', label: 'Profile' },
   ]

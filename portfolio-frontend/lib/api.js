@@ -52,6 +52,28 @@ export const visitorsAPI = {
   getStats: () => api.get('/visitors/stats')
 }
 
+// Internships API
+export const internshipsAPI = {
+  getAll: () => api.get('/internships'),
+  getOne: (id) => api.get(`/internships/${id}`),
+  create: (data) => api.post('/internships', data),
+  update: (id, data) => api.put(`/internships/${id}`, data),
+  delete: (id) => api.delete(`/internships/${id}`)
+}
+
+// Upload API
+export const uploadAPI = {
+  uploadFile: (file) => {
+    const formData = new FormData()
+    formData.append('file', file)
+    return api.post('/upload', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data'
+      }
+    })
+  }
+}
+
 // Auth API
 export const authAPI = {
   login: (credentials) => api.post('/auth/login', credentials),

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { profileAPI } from '@/lib/api'
+import { profileAPI, uploadAPI } from '@/lib/api'
 
 export default function AdminProfile() {
   const [profile, setProfile] = useState({
@@ -11,6 +11,7 @@ export default function AdminProfile() {
     email: '',
     phone: '',
     location: '',
+    resumeUrl: '',
     skills: {
       frontend: [],
       backend: [],
@@ -25,6 +26,7 @@ export default function AdminProfile() {
   })
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
+  const [uploading, setUploading] = useState(false)
   const [message, setMessage] = useState('')
 
   useEffect(() => {
@@ -41,6 +43,35 @@ export default function AdminProfile() {
       console.error('Failed to load profile:', error)
     } finally {
       setLoading(false)
+    }
+  }
+
+  const handleResumeUpload = async (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    if (file.type !== 'application/pdf') {
+      alert('Please upload a PDF document')
+      return
+    }
+
+    setUploading(true)
+    setMessage('')
+
+    try {
+      const response = await uploadAPI.uploadFile(file)
+      if (response.data.success) {
+        setProfile({
+          ...profile,
+          resumeUrl: response.data.data.url
+        })
+        setMessage('Resume uploaded successfully! Click "Save Changes" to save your profile.')
+      }
+    } catch (error) {
+      console.error('Resume upload failed:', error)
+      setMessage('Failed to upload resume')
+    } finally {
+      setUploading(false)
     }
   }
 
@@ -130,6 +161,54 @@ export default function AdminProfile() {
               value={profile.location}
               onChange={(e) => setProfile({ ...profile, location: e.target.value })}
             />
+          </div>
+        </div>
+
+        <div className="form-section">
+          <h2>Resume Management</h2>
+          <div className="form-group">
+            <label>Current Resume URL</label>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center' }}>
+              <input
+                type="text"
+                value={profile.resumeUrl || ''}
+                onChange={(e) => setProfile({ ...profile, resumeUrl: e.target.value })}
+                placeholder="/resume/Koushik_Resume.pdf"
+                style={{ flex: 1 }}
+              />
+              {profile.resumeUrl && (
+                <a 
+                  href={profile.resumeUrl.startsWith('/') ? `http://localhost:5000${profile.resumeUrl}` : profile.resumeUrl} 
+                  target="_blank" 
+                  rel="noopener noreferrer"
+                  className="btn btn-secondary"
+                  style={{ padding: '10px 15px', textDecoration: 'none', whiteSpace: 'nowrap', fontSize: '0.85rem', display: 'flex', alignItems: 'center', gap: '5px' }}
+                >
+                  <i className="fas fa-external-link-alt"></i> View Resume
+                </a>
+              )}
+            </div>
+          </div>
+          <div className="form-group">
+            <label>Upload New Resume (PDF)</label>
+            <div style={{ display: 'flex', gap: '10px', alignItems: 'center', marginTop: '5px' }}>
+              <input
+                type="file"
+                accept=".pdf"
+                onChange={handleResumeUpload}
+                disabled={uploading}
+                style={{ display: 'none' }}
+                id="resume-file-input"
+              />
+              <label 
+                htmlFor="resume-file-input" 
+                className="btn btn-secondary"
+                style={{ cursor: 'pointer', padding: '10px 20px', display: 'inline-flex', alignItems: 'center', gap: '8px' }}
+              >
+                <i className="fas fa-cloud-upload-alt"></i> {uploading ? 'Uploading...' : 'Choose PDF File'}
+              </label>
+              {uploading && <span style={{ color: 'var(--text-muted)', fontSize: '0.9rem' }}>Uploading resume...</span>}
+            </div>
           </div>
         </div>
 

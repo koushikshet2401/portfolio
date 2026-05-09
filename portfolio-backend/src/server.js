@@ -2,18 +2,37 @@ const express = require('express')
 const mongoose = require('mongoose')
 const cors = require('cors')
 const cookieParser = require('cookie-parser')
+const path = require('path')
 require('dotenv').config()
 
 const app = express()
 
 // Middleware
+const allowedOrigins = [
+  process.env.FRONTEND_URL,
+  process.env.FRONTEND_PUBLIC_URL,
+  'http://localhost:3000',
+  'http://localhost:5500',
+  'http://127.0.0.1:3000',
+  'http://127.0.0.1:5500'
+].filter(Boolean)
+
 app.use(cors({
-  origin: '*',
+  origin: (origin, callback) => {
+    if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(null, true) // fallback allow during development just in case
+    }
+  },
   credentials: true
 }))
 app.use(express.json())
 app.use(express.urlencoded({ extended: true }))
 app.use(cookieParser())
+
+// Serve uploaded static files
+app.use('/uploads', express.static(path.join(__dirname, '../uploads')))
 
 // Routes
 app.use('/api/auth', require('./routes/auth'))
@@ -21,6 +40,8 @@ app.use('/api/projects', require('./routes/projects'))
 app.use('/api/messages', require('./routes/messages'))
 app.use('/api/profile', require('./routes/profile'))
 app.use('/api/visitors', require('./routes/visitors'))
+app.use('/api/internships', require('./routes/internships'))
+app.use('/api/upload', require('./routes/upload'))
 
 // Health check
 app.get('/api/health', (req, res) => {
