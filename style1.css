@@ -17,14 +17,14 @@
 
 /* LIGHT THEME - Warm Sand + Ocean Deep */
 [data-theme="light"] {
-    --bg-primary: #F5DEB3;
-    --bg-card: rgba(255, 255, 255, 0.9);
+    --bg-primary: #F0F4F8;
+    --bg-card: #ffffff;
     --text-primary: #1e293b;
     --text-secondary: #003366;
     --text-muted: #64748b;
     --accent: #003366;
-    --border: rgba(0, 51, 102, 0.2);
-    --shadow: 0 8px 30px rgba(0, 51, 102, 0.15);
+    --border: rgba(0, 51, 102, 0.1);
+    --shadow: 0 8px 30px rgba(0, 51, 102, 0.08);
 }
 
 * {
@@ -581,6 +581,7 @@ body {
 /* SKILLS */
 .skills-grid {
     display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
     gap: 30px;
     max-width: 1200px;
     margin: 0 auto;
