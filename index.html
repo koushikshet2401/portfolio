@@ -10,7 +10,7 @@
 </head>
 <body>
     <canvas id="aurora-canvas"></canvas>
-    
+
     <button class="theme-toggle" id="themeToggle">
         <span class="theme-label">Theme</span>
         <div class="theme-switch">
@@ -66,17 +66,17 @@
                         </a>
                     </div>
                 </div>
-                
+
                 <div class="hero-right">
                     <div class="profile-container">
                         <div class="profile-ring"></div>
                         <div class="profile-ring"></div>
                         <img src="./imgs/myPic.jpeg" alt="Koushik Shet" class="profile-img">
                     </div>
-                    
+
                     <div class="hero-stats">
                         <div class="stat-box">
-                            <span class="stat-number counter" data-target="5">0</span>
+                            <span class="stat-number counter" data-target="7">0</span>
                             <span class="stat-label">Projects</span>
                         </div>
                         <div class="stat-box">
@@ -99,7 +99,7 @@
                 <span class="section-tag">Get To Know</span>
                 <h2 class="section-title">About Me</h2>
             </div>
-            
+
             <div class="about-cards">
                 <div class="card glass-card">
                     <div class="card-icon"><i class="fas fa-brain"></i></div>
@@ -126,9 +126,8 @@
                 <span class="section-tag">My Expertise</span>
                 <h2 class="section-title">Technical Skills</h2>
             </div>
-            
+
             <div class="skills-grid">
-                <!-- Backend Development -->
                 <div class="skill-category">
                     <h3><i class="fas fa-server"></i> Backend Development</h3>
                     <div class="skill-items">
@@ -137,8 +136,7 @@
                         <span>Socket.IO</span>
                     </div>
                 </div>
-                
-                <!-- Architecture & Messaging -->
+
                 <div class="skill-category">
                     <h3><i class="fas fa-project-diagram"></i> Architecture & Messaging</h3>
                     <div class="skill-items">
@@ -146,8 +144,7 @@
                         <span>Apache Kafka</span>
                     </div>
                 </div>
-                
-                <!-- Programming Languages -->
+
                 <div class="skill-category">
                     <h3><i class="fas fa-code"></i> Programming Languages</h3>
                     <div class="skill-items">
@@ -155,8 +152,7 @@
                         <span>Python</span>
                     </div>
                 </div>
-                
-                <!-- Frontend Development -->
+
                 <div class="skill-category">
                     <h3><i class="fas fa-laptop-code"></i> Frontend Development</h3>
                     <div class="skill-items">
@@ -166,8 +162,7 @@
                         <span>Tailwind CSS</span>
                     </div>
                 </div>
-                
-                <!-- Database Management -->
+
                 <div class="skill-category">
                     <h3><i class="fas fa-database"></i> Database Management</h3>
                     <div class="skill-items">
@@ -175,8 +170,7 @@
                         <span>MySQL</span>
                     </div>
                 </div>
-                
-                <!-- DevOps & Tools -->
+
                 <div class="skill-category">
                     <h3><i class="fas fa-tools"></i> DevOps & Tools</h3>
                     <div class="skill-items">
@@ -187,8 +181,7 @@
                         <span>Cloudinary</span>
                     </div>
                 </div>
-                
-                <!-- Cloud -->
+
                 <div class="skill-category">
                     <h3><i class="fas fa-cloud"></i> Cloud</h3>
                     <div class="skill-items">
@@ -205,7 +198,7 @@
                 <span class="section-tag">Career Journey</span>
                 <h2 class="section-title">Professional Experience</h2>
             </div>
-            
+
             <div class="timeline">
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
@@ -223,7 +216,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
@@ -239,7 +232,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="timeline-item">
                     <div class="timeline-dot"></div>
                     <div class="timeline-content">
@@ -266,23 +259,20 @@
                 <span class="section-tag">Portfolio</span>
                 <h2 class="section-title">Featured Projects</h2>
             </div>
-            
+
             <div class="projects-grid">
                 <!-- WebhookHub -->
-                <div class="project-card" data-light-img="./imgs/webhoooklight.png" data-dark-img="./imgs/webhookDark.png">
+                <div class="project-card">
                     <div class="project-image">
-                        <img src="./imgs/webhookDark.png" alt="WebhookHub" class="project-screenshot">
+                        <i class="fas fa-bolt project-icon"></i>
                     </div>
                     <div class="project-content">
                         <h3>WebhookHub</h3>
-                        <p>Self-hosted webhook delivery platform featuring signed payloads, automatic exponential-backoff retries, dead-letter queues, manual replays, and a live dashboard.</p>
+                        <p>Self-hosted webhook delivery with signed payloads and retries — dead-letter queues, replays, and a live dashboard.</p>
                         <div class="project-tags">
                             <span>Node.js</span>
-                            <span>React</span>
-                            <span>Redis</span>
                             <span>BullMQ</span>
                             <span>MySQL</span>
-                            <span>Socket.IO</span>
                         </div>
                         <a href="https://github.com/koushikshet2401/Webhookhub" target="_blank" class="project-link">
                             <i class="fab fa-github"></i>
@@ -290,21 +280,18 @@
                     </div>
                 </div>
 
-                <!-- KnowBridge Chat System -->
-                <div class="project-card" data-light-img="./imgs/aiSupport-light.png" data-dark-img="./imgs/aiSupport-dark.png">
+                <!-- KnowBridge -->
+                <div class="project-card">
                     <div class="project-image">
-                        <img src="./imgs/aiSupport-dark.png" alt="KnowBridge AI Support" class="project-screenshot">
+                        <i class="fas fa-comments project-icon"></i>
                     </div>
                     <div class="project-content">
                         <h3>KnowBridge AI Support</h3>
-                        <p>Real-time customer support platform integrated with a pgvector-based RAG Knowledge Base. Supports PDF/text uploads, URL crawling, and automated AI chat escalation.</p>
+                        <p>Real-time support platform with pgvector RAG search — PDF uploads, URL crawling, and AI chat escalation.</p>
                         <div class="project-tags">
                             <span>Node.js</span>
-                            <span>React</span>
                             <span>PostgreSQL</span>
-                            <span>pgvector</span>
                             <span>OpenAI</span>
-                            <span>Socket.IO</span>
                         </div>
                         <a href="https://github.com/koushikshet2401/KnowBridge" target="_blank" class="project-link">
                             <i class="fab fa-github"></i>
@@ -312,9 +299,10 @@
                     </div>
                 </div>
 
-                <div class="project-card" data-light-img="./imgs/AiInterviewLight.jpeg" data-dark-img="./imgs/AiInterviewDark.jpeg">
+                <!-- AI Interview Platform -->
+                <div class="project-card">
                     <div class="project-image">
-                        <img src="./imgs/AiInterviewDark.jpeg" alt="AI Interview Platform" class="project-screenshot">
+                        <i class="fas fa-microphone project-icon"></i>
                     </div>
                     <div class="project-content">
                         <h3>AI Interview Platform</h3>
@@ -329,10 +317,11 @@
                         </a>
                     </div>
                 </div>
-                
-                <div class="project-card" data-light-img="./imgs/HospitalLight.jpeg" data-dark-img="./imgs/HospitalDark.jpeg">
+
+                <!-- Hospital Management -->
+                <div class="project-card">
                     <div class="project-image">
-                        <img src="./imgs/HospitalDark.jpeg" alt="Hospital Management System" class="project-screenshot">
+                        <i class="fas fa-hospital project-icon"></i>
                     </div>
                     <div class="project-content">
                         <h3>Hospital Management System</h3>
@@ -347,10 +336,11 @@
                         </a>
                     </div>
                 </div>
-                
-                <div class="project-card" data-light-img="./imgs/whatsappLight.jpeg" data-dark-img="./imgs/whatsappDark.jpeg">
+
+                <!-- WhatsApp Ticketing -->
+                <div class="project-card">
                     <div class="project-image">
-                        <img src="./imgs/whatsappDark.jpeg" alt="WhatsApp Ticketing System" class="project-screenshot">
+                        <i class="fab fa-whatsapp project-icon"></i>
                     </div>
                     <div class="project-content">
                         <h3>WhatsApp Ticketing System</h3>
@@ -365,10 +355,11 @@
                         </a>
                     </div>
                 </div>
-                
-                <div class="project-card" data-light-img="./imgs/aichatLight.jpeg" data-dark-img="./imgs/aichatDark.jpeg">
+
+                <!-- AI Chat Platform -->
+                <div class="project-card">
                     <div class="project-image">
-                        <img src="./imgs/aichatDark.jpeg" alt="AI Chat Platform" class="project-screenshot">
+                        <i class="fas fa-robot project-icon"></i>
                     </div>
                     <div class="project-content">
                         <h3>AI Chat Platform</h3>
@@ -383,10 +374,11 @@
                         </a>
                     </div>
                 </div>
-                
-                <div class="project-card" data-light-img="./imgs/AiChromExtLight.jpeg" data-dark-img="./imgs/AiChromExtDark.jpeg">
+
+                <!-- AI Chrome Extension -->
+                <div class="project-card">
                     <div class="project-image">
-                        <img src="./imgs/AiChromExtDark.jpeg" alt="AI Chrome Extension" class="project-screenshot">
+                        <i class="fas fa-puzzle-piece project-icon"></i>
                     </div>
                     <div class="project-content">
                         <h3>AI Chrome Extension</h3>
@@ -411,7 +403,7 @@
                 <span class="section-tag">Achievements</span>
                 <h2 class="section-title">Certifications</h2>
             </div>
-            
+
             <div class="certs-grid">
                 <a href="./certificates/certificate-alpha-plus-batch-40-679cae7ac17cccfc8e0f1134.pdf" target="_blank" class="cert-card">
                     <div class="cert-icon"><i class="fab fa-java"></i></div>
@@ -419,14 +411,14 @@
                     <p>Apna College</p>
                     <span class="cert-year">2024</span>
                 </a>
-                
+
                 <a href="./certificates/gfg full_stack.pdf" target="_blank" class="cert-card">
                     <div class="cert-icon"><i class="fas fa-laptop-code"></i></div>
                     <h3>Full Stack Development</h3>
                     <p>GeeksForGeeks</p>
                     <span class="cert-year">2025</span>
                 </a>
-                
+
                 <a href="./certificates/gfg160 days.pdf" target="_blank" class="cert-card">
                     <div class="cert-icon"><i class="fas fa-code"></i></div>
                     <h3>GFG 160 Days DSA</h3>
@@ -443,7 +435,7 @@
                 <span class="section-tag">Let's Connect</span>
                 <h2 class="section-title">Get In Touch</h2>
             </div>
-            
+
             <div class="contact-wrapper">
                 <div class="contact-info">
                     <div class="info-card">
@@ -468,7 +460,7 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <form id="contactForm" class="contact-form">
                     <div class="form-row">
                         <input type="text" name="name" placeholder="Your Name" required>

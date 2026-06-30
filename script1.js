@@ -1,7 +1,7 @@
-// PORTFOLIO JAVASCRIPT - ALL FEATURES + BETTER NORTHERN LIGHTS
+// PORTFOLIO JAVASCRIPT - ALL FEATURES + NORTHERN LIGHTS + NEW ANIMATIONS
 
 // ============================================
-// NORTHERN LIGHTS ANIMATION - MORE VISIBLE & REALISTIC
+// NORTHERN LIGHTS ANIMATION
 // ============================================
 class NorthernLights {
     constructor() {
@@ -15,85 +15,76 @@ class NorthernLights {
     init() {
         this.resize();
         window.addEventListener('resize', () => this.resize());
-        
-        // Create 3 aurora waves with BETTER visibility
+
         this.waves = [
             {
-                color: 'rgba(16, 185, 129, 0.4)',  // Green - MORE OPACITY
-                amplitude: 60,
+                color: 'rgba(217, 133, 82, 0.25)',
+                amplitude: 50,
                 frequency: 0.015,
                 speed: 0.001,
                 offset: 0
             },
             {
-                color: 'rgba(20, 184, 166, 0.35)',  // Teal - MORE OPACITY
-                amplitude: 50,
+                color: 'rgba(184, 92, 56, 0.2)',
+                amplitude: 40,
                 frequency: 0.018,
                 speed: 0.0012,
                 offset: Math.PI / 3
             },
             {
-                color: 'rgba(52, 211, 153, 0.3)',  // Light Green - MORE OPACITY
-                amplitude: 40,
+                color: 'rgba(232, 168, 124, 0.18)',
+                amplitude: 35,
                 frequency: 0.02,
                 speed: 0.0015,
                 offset: Math.PI / 1.5
             }
         ];
-        
+
         this.animate();
     }
 
     resize() {
-        this.canvas.width = window.innerWidth;
-        this.canvas.height = window.innerHeight;
+        const hero = document.querySelector('.hero');
+        const rect = hero ? hero.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
+        this.canvas.width = rect.width;
+        this.canvas.height = rect.height;
     }
 
     drawWave(wave) {
         this.ctx.beginPath();
-        
-        // Start from top
         this.ctx.moveTo(0, 0);
-        
-        // Draw wave path
+
         for (let x = 0; x <= this.canvas.width; x += 5) {
-            const y = this.canvas.height * 0.3 + 
+            const y = this.canvas.height * 0.3 +
                      Math.sin(x * wave.frequency + this.time + wave.offset) * wave.amplitude;
             this.ctx.lineTo(x, y);
         }
-        
-        // Complete the path to create fill area
+
         this.ctx.lineTo(this.canvas.width, 0);
         this.ctx.closePath();
-        
-        // Create gradient for MORE realistic aurora effect
+
         const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height * 0.5);
         gradient.addColorStop(0, wave.color);
-        gradient.addColorStop(0.5, wave.color.replace(/[\d.]+\)/, '0.2)'));  // Fade middle
-        gradient.addColorStop(1, 'rgba(16, 185, 129, 0)');  // Transparent bottom
-        
+        gradient.addColorStop(0.5, wave.color.replace(/[\d.]+\)/, '0.2)'));
+        gradient.addColorStop(1, 'rgba(217, 133, 82, 0)');
+
         this.ctx.fillStyle = gradient;
         this.ctx.fill();
     }
 
     animate() {
-        // Clear canvas
         this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-        
-        // Draw all waves
+
         this.waves.forEach(wave => {
             this.drawWave(wave);
             wave.offset += wave.speed;
         });
-        
+
         this.time += 0.005;
-        
-        // 60fps animation
         requestAnimationFrame(() => this.animate());
     }
 }
 
-// Initialize Northern Lights
 let northernLights;
 if (document.getElementById('aurora-canvas')) {
     northernLights = new NorthernLights();
@@ -105,50 +96,15 @@ if (document.getElementById('aurora-canvas')) {
 const themeToggle = document.getElementById('themeToggle');
 const html = document.documentElement;
 
-// Load saved theme
 const savedTheme = localStorage.getItem('theme') || 'dark';
 html.setAttribute('data-theme', savedTheme);
 
-// Function to update project images based on theme
-function updateProjectImages(theme) {
-    const projectCards = document.querySelectorAll('.project-card');
-    
-    projectCards.forEach(card => {
-        const img = card.querySelector('.project-screenshot');
-        if (img) {
-            const lightImg = card.getAttribute('data-light-img');
-            const darkImg = card.getAttribute('data-dark-img');
-            
-            // Fade out
-            img.style.opacity = '0';
-            
-            // Wait for fade out, then switch image
-            setTimeout(() => {
-                if (theme === 'light') {
-                    img.src = lightImg;
-                } else {
-                    img.src = darkImg;
-                }
-                // Fade in
-                img.style.opacity = '1';
-            }, 300);
-        }
-    });
-}
-
-// Update images on initial load
-updateProjectImages(savedTheme);
-
-// Toggle theme
 themeToggle.addEventListener('click', () => {
     const currentTheme = html.getAttribute('data-theme');
     const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-    
+
     html.setAttribute('data-theme', newTheme);
     localStorage.setItem('theme', newTheme);
-    
-    // Update project images
-    updateProjectImages(newTheme);
 });
 
 // ============================================
@@ -159,7 +115,6 @@ const hamburger = document.getElementById('hamburger');
 const navMenu = document.getElementById('navMenu');
 const navLinks = document.querySelectorAll('.nav-link');
 
-// Navbar scroll effect
 window.addEventListener('scroll', () => {
     if (window.scrollY > 100) {
         navbar.classList.add('scrolled');
@@ -168,13 +123,11 @@ window.addEventListener('scroll', () => {
     }
 });
 
-// Hamburger menu
 hamburger.addEventListener('click', () => {
     hamburger.classList.toggle('active');
     navMenu.classList.toggle('active');
 });
 
-// Close menu when clicking nav link
 navLinks.forEach(link => {
     link.addEventListener('click', () => {
         hamburger.classList.remove('active');
@@ -182,14 +135,12 @@ navLinks.forEach(link => {
     });
 });
 
-// Active nav link on scroll
 window.addEventListener('scroll', () => {
     let current = '';
     const sections = document.querySelectorAll('.section, .hero');
-    
+
     sections.forEach(section => {
         const sectionTop = section.offsetTop;
-        const sectionHeight = section.clientHeight;
         if (window.scrollY >= sectionTop - 200) {
             current = section.getAttribute('id');
         }
@@ -227,7 +178,6 @@ const animateCounter = (counter) => {
     updateCounter();
 };
 
-// Intersection Observer for counters
 const counterObserver = new IntersectionObserver((entries) => {
     entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -263,6 +213,64 @@ revealElements.forEach(element => {
 });
 
 // ============================================
+// NEW: TYPING ANIMATION FOR HERO SUBTITLE
+// ============================================
+function initTypingEffect() {
+    const subtitle = document.querySelector('.hero-subtitle');
+    if (!subtitle) return;
+
+    const fullText = subtitle.textContent.trim();
+    subtitle.textContent = '';
+
+    const cursorSpan = document.createElement('span');
+    cursorSpan.className = 'typed-cursor';
+    cursorSpan.textContent = '\u00A0';
+
+    let i = 0;
+    function type() {
+        if (i <= fullText.length) {
+            subtitle.textContent = fullText.slice(0, i);
+            subtitle.appendChild(cursorSpan);
+            i++;
+            setTimeout(type, 45);
+        } else {
+            setTimeout(() => cursorSpan.remove(), 1200);
+        }
+    }
+    setTimeout(type, 600);
+}
+initTypingEffect();
+
+// ============================================
+// NEW: TILT EFFECT ON PROJECT CARDS
+// ============================================
+function initTiltEffect() {
+    const cards = document.querySelectorAll('.project-card');
+    const maxTilt = 8;
+
+    cards.forEach(card => {
+        card.addEventListener('mousemove', (e) => {
+            const rect = card.getBoundingClientRect();
+            const x = e.clientX - rect.left;
+            const y = e.clientY - rect.top;
+            const centerX = rect.width / 2;
+            const centerY = rect.height / 2;
+
+            const rotateX = ((y - centerY) / centerY) * -maxTilt;
+            const rotateY = ((x - centerX) / centerX) * maxTilt;
+
+            card.style.transform =
+                `perspective(800px) rotateX(${rotateX}deg) rotateY(${rotateY}deg) translateY(-10px)`;
+        });
+
+        card.addEventListener('mouseleave', () => {
+            card.style.transform = '';
+        });
+    });
+}
+initTiltEffect();
+
+// ============================================
 // SMOOTH SCROLL
 // ============================================
 document.querySelectorAll('a[href^="#"]').forEach(anchor => {
@@ -287,44 +295,37 @@ const contactForm = document.getElementById('contactForm');
 
 contactForm.addEventListener('submit', async (e) => {
     e.preventDefault();
-    
+
     const submitBtn = contactForm.querySelector('.btn-primary');
     const originalText = submitBtn.innerHTML;
-    
-    // Show loading state
+
     submitBtn.innerHTML = '<span>Sending...</span> <i class="fas fa-spinner fa-spin"></i>';
     submitBtn.disabled = true;
-    
+
     try {
-        // Send email using EmailJS
         await emailjs.sendForm(
-            'service_dhlqq6e',  // Your service ID
-            'template_8ri1x28', // Your template ID
+            'service_dhlqq6e',
+            'template_8ri1x28',
             contactForm
         );
-        
-        // Success state
+
         submitBtn.innerHTML = '<span>Sent Successfully!</span> <i class="fas fa-check"></i>';
         submitBtn.style.background = '#10b981';
-        
-        // Reset form
+
         contactForm.reset();
-        
-        // Reset button after 3 seconds
+
         setTimeout(() => {
             submitBtn.innerHTML = originalText;
             submitBtn.style.background = '';
             submitBtn.disabled = false;
         }, 3000);
-        
+
     } catch (error) {
         console.error('Email send error:', error);
-        
-        // Error state
+
         submitBtn.innerHTML = '<span>Failed to Send</span> <i class="fas fa-times"></i>';
         submitBtn.style.background = '#ef4444';
-        
-        // Reset button after 3 seconds
+
         setTimeout(() => {
             submitBtn.innerHTML = originalText;
             submitBtn.style.background = '';
@@ -334,7 +335,7 @@ contactForm.addEventListener('submit', async (e) => {
 });
 
 // ============================================
-// CURSOR EFFECT (Optional Enhancement)
+// CURSOR EFFECT
 // ============================================
 const cursor = document.createElement('div');
 cursor.className = 'custom-cursor';
@@ -353,16 +354,15 @@ document.addEventListener('mousemove', (e) => {
 function animateCursor() {
     cursorX += (mouseX - cursorX) * 0.1;
     cursorY += (mouseY - cursorY) * 0.1;
-    
+
     cursor.style.left = cursorX + 'px';
     cursor.style.top = cursorY + 'px';
-    
+
     requestAnimationFrame(animateCursor);
 }
 
 animateCursor();
 
-// Add hover effects to interactive elements
 document.querySelectorAll('a, button, .btn').forEach(el => {
     el.addEventListener('mouseenter', () => {
         cursor.style.transform = 'scale(1.5)';
@@ -377,11 +377,10 @@ document.querySelectorAll('a, button, .btn').forEach(el => {
 // ============================================
 window.addEventListener('scroll', () => {
     const scrolled = window.scrollY;
-    
-    // Parallax for hero content
+
     const heroLeft = document.querySelector('.hero-left');
     const heroRight = document.querySelector('.hero-right');
-    
+
     if (heroLeft) {
         heroLeft.style.transform = `translateY(${scrolled * 0.1}px)`;
     }
@@ -395,8 +394,7 @@ window.addEventListener('scroll', () => {
 // ============================================
 window.addEventListener('load', () => {
     document.body.classList.add('loaded');
-    
-    // Add entrance animations
+
     setTimeout(() => {
         document.querySelectorAll('.hero-left, .hero-right').forEach(el => {
             el.style.opacity = '1';
