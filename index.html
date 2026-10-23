@@ -2745,12 +2745,48 @@ document.getElementById('contactSubmit').addEventListener('click', async () => {
   const btn = document.getElementById('contactSubmit');
   const label = document.getElementById('submitLabel');
   btn.disabled = true;
-  label.textContent = 'Sending…';
+  label.textContent = 'Sending...';
 
+  let sent = false;
+
+  // 1. Direct delivery to koushikshet2401@gmail.com via FormSubmit
   try {
-    await emailjs.send('service_dhlqq6e', 'template_8ri1x28', {
-      name, email, subject, message
+    const res = await fetch('https://formsubmit.co/ajax/koushikshet2401@gmail.com', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json'
+      },
+      body: JSON.stringify({
+        name: name,
+        email: email,
+        _subject: `New Portfolio Message: ${subject} from ${name}`,
+        message: message,
+        _template: 'table',
+        _captcha: 'false'
+      })
     });
+    const data = await res.json();
+    if (res.ok || data.success === "true" || data.message) {
+      sent = true;
+    }
+  } catch (fsErr) {
+    console.warn('FormSubmit attempt failed, trying EmailJS:', fsErr);
+  }
+
+  // 2. EmailJS fallback
+  if (!sent && typeof emailjs !== 'undefined') {
+    try {
+      await emailjs.send('service_dhlqq6e', 'template_8ri1x28', {
+        name, email, subject, message
+      });
+      sent = true;
+    } catch (ejsErr) {
+      console.warn('EmailJS attempt failed:', ejsErr);
+    }
+  }
+
+  if (sent) {
     label.textContent = 'Sent Successfully!';
     btn.style.background = '#10b981';
     document.getElementById('contact-name').value = '';
@@ -2762,19 +2798,17 @@ document.getElementById('contactSubmit').addEventListener('click', async () => {
       btn.style.background = '';
       btn.disabled = false;
     }, 3000);
-  } catch(err) {
-    console.error('EmailJS error:', err);
-    label.textContent = 'Failed to Send';
-    btn.style.background = '#ef4444';
+  } else {
+    // 3. Fallback: open mailto so the user never loses the message
+    label.textContent = 'Opening Mail...';
+    window.location.href = `mailto:koushikshet2401@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("From: " + name + " (" + email + ")\n\n" + message)}`;
     setTimeout(() => {
       label.textContent = 'Send Message';
       btn.style.background = '';
       btn.disabled = false;
-    }, 3000);
+    }, 2500);
   }
-});
-
-// ============================================
+});// ============================================
 // CONSOLE EASTER EGG
 // ============================================
 console.log('%c👋 Hey there!', 'font-size:22px;color:#CC001E;font-weight:bold;');

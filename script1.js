@@ -222,50 +222,92 @@ document.querySelectorAll('a[href^="#"]').forEach(anchor => {
 // ============================================
 // EMAIL JS - CONTACT FORM
 // ============================================
-emailjs.init('h-u2vGGgRkBRbnSiV'); // Your EmailJS public key
+emailjs.init('h-u2vGGgRkBRbnSiV');
 
 const contactForm = document.getElementById('contactForm');
 
-contactForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
+if (contactForm) {
+    contactForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
 
-    const submitBtn = contactForm.querySelector('.btn-primary');
-    const originalText = submitBtn.innerHTML;
+        const submitBtn = contactForm.querySelector('.btn-primary') || contactForm.querySelector('button[type="submit"]');
+        const originalText = submitBtn ? submitBtn.innerHTML : 'Send Message';
 
-    submitBtn.innerHTML = '<span>Sending...</span> <i class="fas fa-spinner fa-spin"></i>';
-    submitBtn.disabled = true;
+        if (submitBtn) {
+            submitBtn.innerHTML = '<span>Sending...</span> <i class="fas fa-spinner fa-spin"></i>';
+            submitBtn.disabled = true;
+        }
 
-    try {
-        await emailjs.sendForm(
-            'service_dhlqq6e',
-            'template_8ri1x28',
-            contactForm
-        );
+        const formData = new FormData(contactForm);
+        const name = formData.get('name') || document.getElementById('contact-name')?.value || '';
+        const email = formData.get('email') || document.getElementById('contact-email')?.value || '';
+        const subject = formData.get('subject') || document.getElementById('contact-subject')?.value || 'Portfolio Contact';
+        const message = formData.get('message') || document.getElementById('contact-message')?.value || '';
 
-        submitBtn.innerHTML = '<span>Sent Successfully!</span> <i class="fas fa-check"></i>';
-        submitBtn.style.background = '#10b981';
+        let sent = false;
 
-        contactForm.reset();
+        // 1. Direct delivery to koushikshet2401@gmail.com
+        try {
+            const res = await fetch('https://formsubmit.co/ajax/koushikshet2401@gmail.com', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json'
+                },
+                body: JSON.stringify({
+                    name: name,
+                    email: email,
+                    _subject: `New Message: ${subject} from ${name}`,
+                    message: message,
+                    _captcha: 'false'
+                })
+            });
+            const data = await res.json();
+            if (res.ok || data.success === "true" || data.message) {
+                sent = true;
+            }
+        } catch (fsErr) {
+            console.warn('FormSubmit failed, trying EmailJS fallback:', fsErr);
+        }
 
-        setTimeout(() => {
-            submitBtn.innerHTML = originalText;
-            submitBtn.style.background = '';
-            submitBtn.disabled = false;
-        }, 3000);
+        // 2. EmailJS fallback
+        if (!sent && typeof emailjs !== 'undefined') {
+            try {
+                await emailjs.sendForm('service_dhlqq6e', 'template_8ri1x28', contactForm);
+                sent = true;
+            } catch (err) {
+                console.warn('EmailJS error:', err);
+            }
+        }
 
-    } catch (error) {
-        console.error('Email send error:', error);
-
-        submitBtn.innerHTML = '<span>Failed to Send</span> <i class="fas fa-times"></i>';
-        submitBtn.style.background = '#ef4444';
-
-        setTimeout(() => {
-            submitBtn.innerHTML = originalText;
-            submitBtn.style.background = '';
-            submitBtn.disabled = false;
-        }, 3000);
-    }
-});
+        if (sent) {
+            if (submitBtn) {
+                submitBtn.innerHTML = '<span>Sent Successfully!</span> <i class="fas fa-check"></i>';
+                submitBtn.style.background = '#10b981';
+            }
+            contactForm.reset();
+            setTimeout(() => {
+                if (submitBtn) {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style.background = '';
+                    submitBtn.disabled = false;
+                }
+            }, 3000);
+        } else {
+            if (submitBtn) {
+                submitBtn.innerHTML = '<span>Opening Mail...</span> <i class="fas fa-envelope"></i>';
+            }
+            window.location.href = `mailto:koushikshet2401@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent("From: " + name + " (" + email + ")\n\n" + message)}`;
+            setTimeout(() => {
+                if (submitBtn) {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.style.background = '';
+                    submitBtn.disabled = false;
+                }
+            }, 3000);
+        }
+    });
+}
 
 // ============================================
 // CURSOR EFFECT
