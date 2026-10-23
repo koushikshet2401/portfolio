@@ -1,94 +1,24 @@
-// PORTFOLIO JAVASCRIPT - ALL FEATURES + NORTHERN LIGHTS + NEW ANIMATIONS
+// PORTFOLIO JAVASCRIPT - 3D SPLINE ROBOT BACKGROUND + DUAL THEME
 
 // ============================================
-// NORTHERN LIGHTS ANIMATION
+// SPLINE 3D ROBOT VIEWER HELPER
 // ============================================
-class NorthernLights {
-    constructor() {
-        this.canvas = document.getElementById('aurora-canvas');
-        this.ctx = this.canvas.getContext('2d');
-        this.waves = [];
-        this.time = 0;
-        this.init();
-    }
-
-    init() {
-        this.resize();
-        window.addEventListener('resize', () => this.resize());
-
-        this.waves = [
-            {
-                color: 'rgba(217, 133, 82, 0.25)',
-                amplitude: 50,
-                frequency: 0.015,
-                speed: 0.001,
-                offset: 0
-            },
-            {
-                color: 'rgba(184, 92, 56, 0.2)',
-                amplitude: 40,
-                frequency: 0.018,
-                speed: 0.0012,
-                offset: Math.PI / 3
-            },
-            {
-                color: 'rgba(232, 168, 124, 0.18)',
-                amplitude: 35,
-                frequency: 0.02,
-                speed: 0.0015,
-                offset: Math.PI / 1.5
+window.addEventListener('DOMContentLoaded', () => {
+    const viewer = document.querySelector('spline-viewer');
+    if (viewer) {
+        // Remove Spline watermark logo inside shadow DOM once attached
+        const checkLogo = setInterval(() => {
+            if (viewer.shadowRoot) {
+                const logo = viewer.shadowRoot.querySelector('#logo');
+                if (logo) {
+                    logo.style.display = 'none';
+                    clearInterval(checkLogo);
+                }
             }
-        ];
-
-        this.animate();
+        }, 100);
+        setTimeout(() => clearInterval(checkLogo), 6000);
     }
-
-    resize() {
-        const hero = document.querySelector('.hero');
-        const rect = hero ? hero.getBoundingClientRect() : { width: window.innerWidth, height: window.innerHeight };
-        this.canvas.width = rect.width;
-        this.canvas.height = rect.height;
-    }
-
-    drawWave(wave) {
-        this.ctx.beginPath();
-        this.ctx.moveTo(0, 0);
-
-        for (let x = 0; x <= this.canvas.width; x += 5) {
-            const y = this.canvas.height * 0.3 +
-                     Math.sin(x * wave.frequency + this.time + wave.offset) * wave.amplitude;
-            this.ctx.lineTo(x, y);
-        }
-
-        this.ctx.lineTo(this.canvas.width, 0);
-        this.ctx.closePath();
-
-        const gradient = this.ctx.createLinearGradient(0, 0, 0, this.canvas.height * 0.5);
-        gradient.addColorStop(0, wave.color);
-        gradient.addColorStop(0.5, wave.color.replace(/[\d.]+\)/, '0.2)'));
-        gradient.addColorStop(1, 'rgba(217, 133, 82, 0)');
-
-        this.ctx.fillStyle = gradient;
-        this.ctx.fill();
-    }
-
-    animate() {
-        this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-
-        this.waves.forEach(wave => {
-            this.drawWave(wave);
-            wave.offset += wave.speed;
-        });
-
-        this.time += 0.005;
-        requestAnimationFrame(() => this.animate());
-    }
-}
-
-let northernLights;
-if (document.getElementById('aurora-canvas')) {
-    northernLights = new NorthernLights();
-}
+});
 
 // ============================================
 // THEME TOGGLE
@@ -96,16 +26,19 @@ if (document.getElementById('aurora-canvas')) {
 const themeToggle = document.getElementById('themeToggle');
 const html = document.documentElement;
 
-const savedTheme = localStorage.getItem('theme') || 'dark';
+const savedTheme = localStorage.getItem('portfolio-theme') || localStorage.getItem('theme') || 'dark';
 html.setAttribute('data-theme', savedTheme);
 
-themeToggle.addEventListener('click', () => {
-    const currentTheme = html.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+if (themeToggle) {
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = html.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
 
-    html.setAttribute('data-theme', newTheme);
-    localStorage.setItem('theme', newTheme);
-});
+        html.setAttribute('data-theme', newTheme);
+        localStorage.setItem('portfolio-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    });
+}
 
 // ============================================
 // NAVIGATION
@@ -406,10 +339,10 @@ window.addEventListener('load', () => {
 // ============================================
 // CONSOLE EASTER EGG
 // ============================================
-console.log('%c👋 Hey there!', 'font-size: 24px; color: #10b981; font-weight: bold;');
-console.log('%cLooking at the code? I like your style! 😎', 'font-size: 14px; color: #10b981;');
+console.log('%c👋 Hey there!', 'font-size: 24px; color: #6366f1; font-weight: bold;');
+console.log('%cLooking at the code? I like your style! 😎', 'font-size: 14px; color: #6366f1;');
 console.log('%cFeel free to reach out: Koushikshet2401@gmail.com', 'font-size: 12px; color: #64748b;');
 
-console.log('%c🎨 Built with: HTML, CSS, JavaScript', 'font-size: 12px; color: #10b981;');
-console.log('%c🌌 Northern Lights animation: Custom Canvas API', 'font-size: 12px; color: #10b981;');
-console.log('%c⚡ Dual Theme System: CSS Variables + LocalStorage', 'font-size: 12px; color: #10b981;');
+console.log('%c🎨 Built with: HTML, CSS, JavaScript', 'font-size: 12px; color: #6366f1;');
+console.log('%c🤖 Spline 3D Interactive Robot Experience', 'font-size: 12px; color: #6366f1;');
+console.log('%c⚡ Dual Theme System: CSS Variables + LocalStorage', 'font-size: 12px; color: #6366f1;');
