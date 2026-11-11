@@ -1,72 +1,64 @@
 'use client'
 
 export default function Skills() {
-  const skills = {
-    frontend: [
-      { name: 'HTML5', icon: 'fab fa-html5' },
-      { name: 'CSS3', icon: 'fab fa-css3-alt' },
-      { name: 'JavaScript', icon: 'fab fa-js' },
-      { name: 'React', icon: 'fab fa-react' },
-      { name: 'Tailwind CSS', icon: 'fas fa-wind' },
-      { name: 'Bootstrap', icon: 'fab fa-bootstrap' },
-    ],
-    backend: [
-      { name: 'Node.js', icon: 'fab fa-node' },
-      { name: 'Express.js', icon: 'fas fa-server' },
-      { name: 'MongoDB', icon: 'fas fa-database' },
-      { name: 'SQL', icon: 'fas fa-database' },
-      { name: 'REST APIs', icon: 'fas fa-code' },
-    ],
-    tools: [
-      { name: 'Python', icon: 'fab fa-python' },
-      { name: 'Java', icon: 'fab fa-java' },
-      { name: 'Git/GitHub', icon: 'fab fa-git-alt' },
-      { name: 'VS Code', icon: 'fas fa-code' },
-      { name: 'Postman', icon: 'fas fa-paper-plane' },
-    ]
-  }
+  const skillCategories = [
+    {
+      title: 'Backend Development',
+      skills: ['Node.js', 'Express.js', 'Socket.IO', 'REST APIs'],
+    },
+    {
+      title: 'Architecture & Messaging',
+      skills: ['Redis', 'BullMQ', 'Apache Kafka', 'Webhooks'],
+    },
+    {
+      title: 'AI / ML',
+      skills: ['RAG Pipelines', 'OpenAI API', 'pgvector', 'Prompt Engineering'],
+    },
+    {
+      title: 'Frontend Development',
+      skills: ['React', 'HTML', 'CSS', 'Tailwind CSS', 'JavaScript (ES6+)'],
+    },
+    {
+      title: 'Database Management',
+      skills: ['PostgreSQL', 'MongoDB', 'MySQL'],
+    },
+    {
+      title: 'Languages',
+      skills: ['JavaScript', 'TypeScript', 'Python', 'Java'],
+    },
+    {
+      title: 'DevOps & Tools',
+      skills: ['Docker', 'Git', 'GitHub', 'Postman', 'Cloudinary'],
+    },
+    {
+      title: 'Cloud',
+      skills: ['Microsoft Azure', 'Vercel', 'Render'],
+    },
+  ]
 
   return (
-    <section id="skills" className="section skills">
+    <section id="stack" className="section" style={{ background: 'transparent' }}>
       <div className="container">
-        <div className="section-header">
-          <span className="section-tag">What I Do</span>
-          <h2 className="section-title">Skills & Technologies</h2>
+        <div className="section-ribbon">
+          <span className="section-tag">04 // STACK</span>
+          <span className="section-line"></span>
         </div>
-        
+        <h2 className="section-title">Technical Stack</h2>
+        <p className="section-subtitle">The tools and technologies I build with.</p>
+
         <div className="skills-grid">
-          <div className="skill-category">
-            <h3><i className="fas fa-palette"></i> Frontend</h3>
-            <div className="skill-badges">
-              {skills.frontend.map((skill, index) => (
-                <span key={index} className="skill-badge">
-                  <i className={skill.icon}></i> {skill.name}
-                </span>
-              ))}
+          {skillCategories.map((cat, idx) => (
+            <div key={idx} className="skill-cat reveal visible">
+              <div className="skill-cat-title">{cat.title}</div>
+              <div className="skill-tags">
+                {cat.skills.map((skill, sIdx) => (
+                  <span key={sIdx} className="skill-tag">
+                    {skill}
+                  </span>
+                ))}
+              </div>
             </div>
-          </div>
-
-          <div className="skill-category">
-            <h3><i className="fas fa-server"></i> Backend</h3>
-            <div className="skill-badges">
-              {skills.backend.map((skill, index) => (
-                <span key={index} className="skill-badge">
-                  <i className={skill.icon}></i> {skill.name}
-                </span>
-              ))}
-            </div>
-          </div>
-
-          <div className="skill-category">
-            <h3><i className="fas fa-tools"></i> Tools & Languages</h3>
-            <div className="skill-badges">
-              {skills.tools.map((skill, index) => (
-                <span key={index} className="skill-badge">
-                  <i className={skill.icon}></i> {skill.name}
-                </span>
-              ))}
-            </div>
-          </div>
+          ))}
         </div>
       </div>
     </section>

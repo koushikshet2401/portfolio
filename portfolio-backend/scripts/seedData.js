@@ -5,6 +5,7 @@ require('dotenv').config()
 const Project = require('../src/models/Project')
 const Profile = require('../src/models/Profile')
 const Internship = require('../src/models/Internship')
+const Certificate = require('../src/models/Certificate')
 
 async function seedDatabase() {
   try {
@@ -16,59 +17,87 @@ async function seedDatabase() {
     await Project.deleteMany({})
     await Profile.deleteMany({})
     await Internship.deleteMany({})
+    await Certificate.deleteMany({})
     console.log('🗑️  Cleared existing data')
 
-    // Seed Projects
+    // Seed Projects (Matching actual production portfolio showcase)
     const projects = [
       {
-        title: 'AI-powered Interview Platform',
-        description: 'Practice interviews, analyze performance, and improve skills with AI-powered platform built using React and AI technologies.',
-        image: '/imgs/ai_interview_platform.jpeg',
-        githubLink: 'https://github.com/koushikshet2401/ai-mock-interview-site',
+        title: 'KnowBridge — AI-Powered Customer Support Platform',
+        description: 'A multi-tenant customer support platform featuring an embeddable React chat widget, real-time agent routing, retrieval-augmented generation (RAG), custom web crawling, and automated AI responses with fallback escalation.',
+        image: '/imgs/aiSupport-dark.png',
+        githubLink: 'https://github.com/koushikshet2401/KnowBridge',
         liveLink: '',
-        technologies: ['React', 'AI', 'MERN', 'Tailwind CSS'],
+        technologies: ['React', 'Node.js', 'PostgreSQL', 'pgvector', 'OpenAI API', 'Socket.IO', 'Express.js'],
+        badges: ['FLAGSHIP', 'AI / RAG', 'MULTI-TENANT'],
         featured: true,
         order: 1
       },
       {
-        title: 'Hospital Management System',
-        description: 'Comprehensive healthcare management solution with appointment scheduling, patient records, and billing system.',
-        image: '/imgs/hospital_management.jpeg',
-        githubLink: 'https://github.com/koushikshet2401/Medi-flow',
+        title: 'WebhookHub — Resilient Webhook Delivery',
+        description: 'Self-hosted webhook delivery platform with HMAC-signed payloads, automatic retries with exponential backoff, dead-letter queue handling, and a live delivery telemetry dashboard.',
+        image: '/imgs/webhookDark.png',
+        githubLink: 'https://github.com/koushikshet2401/Webhookhub',
         liveLink: '',
-        technologies: ['MERN', 'Stripe', 'Clerk', 'MongoDB'],
-        featured: true,
+        technologies: ['Node.js', 'Redis', 'BullMQ', 'MySQL'],
+        badges: ['DISTRIBUTED SYSTEMS', 'RELIABILITY'],
+        featured: false,
         order: 2
       },
       {
-        title: 'Real Estate Showcase',
-        description: 'Modern real estate platform with interactive property listings, virtual tours, and advanced search filters.',
-        image: '/imgs/real_estate.jpeg',
-        githubLink: 'https://github.com/koushikshet2401/real-estate-shocase',
-        liveLink: 'https://real-estate-shocase.vercel.app',
-        technologies: ['React', 'MongoDB', 'Node.js', 'Express'],
-        featured: true,
+        title: 'Medi-Flow — Hospital Management System',
+        description: 'A comprehensive hospital management platform for managing patient records, doctor scheduling, multi-tier billing pipelines, and department resource allocation with Stripe payment integration.',
+        image: '/imgs/HospitalDark.jpeg',
+        githubLink: 'https://github.com/koushikshet2401/Medi-Flow',
+        liveLink: '',
+        technologies: ['MERN', 'Stripe', 'Clerk', 'MongoDB'],
+        badges: ['FULL-STACK', 'HEALTHCARE ERP'],
+        featured: false,
         order: 3
       },
       {
-        title: 'Hostel Management System',
-        description: 'Complete hostel administration system with room allocation, student management, and fee tracking.',
-        image: '/imgs/hostel_management.jpeg',
-        githubLink: 'https://github.com/koushikshet2401/hostel-management',
+        title: 'AI Interview Platform',
+        description: 'AI-powered platform for mock interview practice with real-time performance analysis, AI-generated questions tailored to role and experience level, and detailed feedback reports.',
+        image: '/imgs/AiInterviewDark.jpeg',
+        githubLink: 'https://github.com/koushikshet2401/ai-mock-interview-site',
         liveLink: '',
-        technologies: ['MERN', 'Express', 'MongoDB', 'React'],
+        technologies: ['React', 'Node.js', 'AI', 'MERN'],
+        badges: ['AI / MERN', 'INTERVIEW PREP'],
         featured: false,
         order: 4
       },
       {
-        title: 'Personal Portfolio Website',
-        description: 'Modern portfolio showcasing projects, skills, and professional experience with smooth animations.',
-        image: '/imgs/portfolio.jpeg',
-        githubLink: 'https://github.com/koushikshet2401/portfolio',
-        liveLink: 'https://koushikshet.vercel.app',
-        technologies: ['HTML', 'CSS', 'JavaScript', 'Three.js', 'Lenis'],
+        title: 'WhatsApp Ticketing System',
+        description: 'Real-time customer support system with WhatsApp Business API integration, automated ticket routing, agent assignment, and conversation threading.',
+        image: '/imgs/whatsapTicketDark.jpeg',
+        githubLink: 'https://github.com/koushikshet2401/WhatsApp-Ticketing-Management-System',
+        liveLink: '',
+        technologies: ['Node.js', 'WhatsApp API', 'Socket.IO'],
+        badges: ['REAL-TIME', 'MESSAGING API'],
         featured: false,
         order: 5
+      },
+      {
+        title: 'AI Chat Platform',
+        description: 'MERN stack chatbot application with generative AI capabilities, conversation history, admin analytics dashboard, and user management system.',
+        image: '/imgs/aichatDark.jpeg',
+        githubLink: 'https://github.com/koushikshet2401/AI-BOT',
+        liveLink: '',
+        technologies: ['MERN', 'OpenAI', 'Analytics'],
+        badges: ['MERN', 'AI / ANALYTICS'],
+        featured: false,
+        order: 6
+      },
+      {
+        title: 'AI Chrome Extension',
+        description: 'Smart productivity enhancer browser extension powered by AI capabilities — content summarisation, page Q&A, and intelligent text assistance.',
+        image: '/imgs/AiChromExtDark.jpeg',
+        githubLink: 'https://github.com/koushikshet2401/ai-chrome-extension',
+        liveLink: '',
+        technologies: ['JavaScript', 'Chrome API', 'AI'],
+        badges: ['BROWSER EXTENSION', 'AI'],
+        featured: false,
+        order: 7
       }
     ]
 
@@ -140,11 +169,43 @@ async function seedDatabase() {
     await Internship.insertMany(internships)
     console.log('✅ Internships seeded')
 
+    // Seed Certificates
+    const certificates = [
+      {
+        title: 'Java Programming',
+        issuer: 'Apna College',
+        year: '2024',
+        icon: 'fab fa-java',
+        file: '/certificates/certificate-alpha-plus-batch-40-679cae7ac17cccfc8e0f1134.pdf',
+        order: 1
+      },
+      {
+        title: 'Full Stack Development',
+        issuer: 'GeeksForGeeks',
+        year: '2025',
+        icon: 'fas fa-laptop-code',
+        file: '/certificates/gfg full_stack.pdf',
+        order: 2
+      },
+      {
+        title: 'GFG 160 Days DSA',
+        issuer: 'GeeksForGeeks',
+        year: '2025',
+        icon: 'fas fa-code',
+        file: '/certificates/gfg160 days.pdf',
+        order: 3
+      }
+    ]
+
+    await Certificate.insertMany(certificates)
+    console.log('✅ Certificates seeded')
+
     console.log('\n🎉 Database seeded successfully!')
     console.log('\n📊 Summary:')
     console.log(`   - ${projects.length} projects added`)
     console.log('   - 1 profile created')
     console.log(`   - ${internships.length} internships added`)
+    console.log(`   - ${certificates.length} certificates added`)
     console.log('\n✨ You can now start the server with: npm run dev')
     
     process.exit(0)

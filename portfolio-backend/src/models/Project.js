@@ -25,6 +25,12 @@ const projectSchema = new mongoose.Schema({
   technologies: [{
     type: String
   }],
+  badges: [{
+    type: String
+  }],
+  previewData: {
+    type: mongoose.Schema.Types.Mixed
+  },
   featured: {
     type: Boolean,
     default: false
@@ -37,7 +43,9 @@ const projectSchema = new mongoose.Schema({
   timestamps: true 
 })
 
-// Index for faster queries
+// Indexes for hot queries
 projectSchema.index({ order: 1, createdAt: -1 })
+projectSchema.index({ featured: 1, order: 1 })
+projectSchema.index({ createdAt: -1 })
 
 module.exports = mongoose.model('Project', projectSchema)

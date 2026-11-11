@@ -41,6 +41,8 @@ app.use('/api/messages', require('./routes/messages'))
 app.use('/api/profile', require('./routes/profile'))
 app.use('/api/visitors', require('./routes/visitors'))
 app.use('/api/internships', require('./routes/internships'))
+app.use('/api/certificates', require('./routes/certificates'))
+app.use('/api/dashboard', require('./routes/dashboard'))
 app.use('/api/upload', require('./routes/upload'))
 
 // Health check

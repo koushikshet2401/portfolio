@@ -1,88 +1,82 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+import { certificatesAPI } from '@/lib/api'
+
 export default function Certificates() {
-  const certificates = [
-    {
-      title: 'Full Stack Web Development',
-      issuer: 'Next Gen Invent',
-      date: 'January 2025',
-      icon: 'fas fa-code',
-      color: '#667eea',
-      link: '/certificates/certificate-alpha-plus-batch-40-679cae7ac17cccfc8e0f1134.pdf',
-      badge: 'Full Stack'
-    },
-    {
-      title: 'GFG Full Stack Development',
-      issuer: 'GeeksForGeeks',
-      date: '2024',
-      icon: 'fas fa-laptop-code',
-      color: '#10b981',
-      link: '/certificates/gfg full_stack.pdf',
-      badge: 'Full Stack'
-    },
-    {
-      title: 'GFG 160 Days of DSA',
-      issuer: 'GeeksForGeeks',
-      date: '2024',
-      icon: 'fas fa-brain',
-      color: '#f59e0b',
-      link: '/certificates/gfg160 days.pdf',
-      badge: 'DSA'
-    }
-  ]
+  const [certs, setCerts] = useState(fallbackCerts)
+
+  useEffect(() => {
+    certificatesAPI.getAll()
+      .then((res) => {
+        if (res.data?.data && res.data.data.length > 0) {
+          setCerts(res.data.data)
+        }
+      })
+      .catch((err) => {
+        console.warn('Certificates API notice (using fallback):', err.message)
+      })
+  }, [])
 
   return (
-    <section id="certificates" className="section certificates">
+    <section id="certificates" className="section" style={{ background: 'transparent' }}>
       <div className="container">
-        <div className="section-header">
-          <span className="section-tag">Achievements</span>
-          <h2 className="section-title">Certifications</h2>
+        <div className="section-ribbon">
+          <span className="section-tag">05 // CERTIFICATIONS</span>
+          <span className="section-line"></span>
         </div>
+        <h2 className="section-title">Achievements &amp; Credentials</h2>
+        <p className="section-subtitle">Verified learning milestones and course completions.</p>
 
-        <div className="certificates-grid">
-          {certificates.map((cert, index) => (
-            <div key={index} className="certificate-card" data-tilt>
-              {/* Icon banner */}
-              <div className="cert-banner" style={{ background: `linear-gradient(135deg, ${cert.color}22, ${cert.color}44)`, borderBottom: `2px solid ${cert.color}33` }}>
-                <div className="cert-icon-wrap" style={{ background: `linear-gradient(135deg, ${cert.color}, ${cert.color}cc)` }}>
-                  <i className={cert.icon} style={{ color: '#fff', fontSize: '2rem' }}></i>
-                </div>
-                <span className="cert-badge" style={{ background: cert.color }}>{cert.badge}</span>
+        <div className="certs-grid">
+          {certs.map((cert, index) => (
+            <a
+              key={cert._id || index}
+              className="cert-card reveal visible"
+              href={
+                cert.file?.startsWith('/uploads')
+                  ? `${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '')}${cert.file}`
+                  : (cert.file || cert.credentialUrl || '#')
+              }
+              target="_blank"
+              rel="noopener noreferrer"
+            >
+              <div className="cert-icon-box">
+                <i className={cert.icon || 'fas fa-award'}></i>
               </div>
-
-              {/* Content */}
-              <div className="certificate-content">
+              <div className="cert-info">
                 <h3>{cert.title}</h3>
-                <p className="issuer">
-                  <i className="fas fa-building" style={{ marginRight: '6px', color: cert.color }}></i>
-                  {cert.issuer}
-                </p>
-                <p className="date">
-                  <i className="fas fa-calendar-alt" style={{ marginRight: '6px', color: cert.color }}></i>
-                  {cert.date}
-                </p>
-                <a
-                  href={cert.link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="cert-view-btn"
-                  style={{ borderColor: cert.color, color: cert.color }}
-                  onMouseOver={(e) => {
-                    e.currentTarget.style.background = cert.color
-                    e.currentTarget.style.color = '#fff'
-                  }}
-                  onMouseOut={(e) => {
-                    e.currentTarget.style.background = 'transparent'
-                    e.currentTarget.style.color = cert.color
-                  }}
-                >
-                  <i className="fas fa-file-pdf"></i> View Certificate
-                </a>
+                <p>{cert.issuer}</p>
+                <span className="cert-year">{cert.year}</span>
               </div>
-            </div>
+            </a>
           ))}
         </div>
       </div>
     </section>
   )
 }
+
+const fallbackCerts = [
+  {
+    title: 'Java Programming',
+    issuer: 'Apna College',
+    year: '2024',
+    icon: 'fab fa-java',
+    file: '/certificates/certificate-alpha-plus-batch-40-679cae7ac17cccfc8e0f1134.pdf',
+  },
+  {
+    title: 'Full Stack Development',
+    issuer: 'GeeksForGeeks',
+    year: '2025',
+    icon: 'fas fa-laptop-code',
+    file: '/certificates/gfg full_stack.pdf',
+  },
+  {
+    title: 'GFG 160 Days DSA',
+    issuer: 'GeeksForGeeks',
+    year: '2025',
+    icon: 'fas fa-code',
+    file: '/certificates/gfg160 days.pdf',
+  },
+]

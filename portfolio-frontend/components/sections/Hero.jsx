@@ -1,105 +1,109 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
+import HeroScene3D from '../animations/HeroScene3D'
 
 export default function Hero() {
-  const [counts, setCounts] = useState({ projects: 0, internships: 0, efficiency: 0 })
-  const hasAnimated = useRef(false)
-
-  useEffect(() => {
-    const observer = new IntersectionObserver((entries) => {
-      if (entries[0].isIntersecting && !hasAnimated.current) {
-        hasAnimated.current = true
-        animateCounter('projects', 5)
-        animateCounter('internships', 2)
-        animateCounter('efficiency', 100)
-      }
-    }, { threshold: 0.5 })
-
-    const heroSection = document.getElementById('home')
-    if (heroSection) observer.observe(heroSection)
-
-    return () => observer.disconnect()
-  }, [])
-
-  const animateCounter = (key, target) => {
-    const duration = 2000
-    const step = target / (duration / 16)
-    let current = 0
-
-    const update = () => {
-      current += step
-      if (current < target) {
-        setCounts(prev => ({ ...prev, [key]: Math.floor(current) }))
-        requestAnimationFrame(update)
-      } else {
-        setCounts(prev => ({ ...prev, [key]: target }))
-      }
+  const handleScrollToProjects = (e) => {
+    e.preventDefault()
+    if (typeof window !== 'undefined' && window.__goToPortfolioSection) {
+      window.__goToPortfolioSection('projects')
+      return
     }
-
-    update()
+    const target = document.getElementById('projects')
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' })
+    }
   }
 
   return (
-    <section id="home" className="hero">
-      <div className="hero-bg-animation"></div>
+    <section
+      id="home"
+      className="section"
+      style={{ borderBottom: '1px solid var(--surface-container-high)', padding: '4rem 0' }}
+    >
       <div className="container">
-        <div className="hero-content">
-          <div className="hero-text">
-            <div className="hero-label animate-slide-up">
-              <span className="pulse-dot"></span>
-              Available for opportunities
+        <div className="hero-grid">
+          {/* Left Column */}
+          <div className="hero-left">
+            {/* Eyebrow */}
+            <div className="hero-eyebrow">
+              <span className="status-dot" style={{ flexShrink: 0 }}></span>
+              <span>Full-Stack Developer / Backend Engineer</span>
             </div>
-            
+
+            {/* Headline */}
             <h1 className="hero-title">
-              <span className="line animate-slide-up">Hi, I&apos;m</span>
-              <span className="line animate-slide-up gradient-text">Koushik Shet</span>
+              Building systems that make <span className="accent">complex things</span> feel simple.
             </h1>
-            
-            <p className="hero-subtitle animate-slide-up">
-              Full Stack Developer | MERN Stack Specialist
+
+            {/* Description */}
+            <p className="hero-desc">
+              I build AI-powered products, scalable backend systems, and real-time web experiences that solve practical problems with ruthless architectural clarity.
             </p>
-            
-            <div className="hero-stats animate-slide-up">
-              <div className="stat-item">
-                <span className="stat-num counter" data-target="5">{counts.projects}</span>
-                <span className="stat-label">Projects</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-num counter" data-target="2">{counts.internships}</span>
-                <span className="stat-label">Internships</span>
-              </div>
-              <div className="stat-item">
-                <span className="stat-num counter" data-target="100">{counts.efficiency}%</span>
-                <span className="stat-label">Efficiency</span>
-              </div>
-            </div>
-            
-            <div className="hero-buttons animate-slide-up">
-              <a href="/resume/Koushik_shet_CV_02.pdf" className="btn btn-primary" target="_blank">
+
+            {/* CTAs */}
+            <div className="hero-ctas">
+              <a
+                className="btn-crimson"
+                href="/resume/Koushik_DS_CV.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>
+                  download
+                </span>
                 <span>Download Resume</span>
-                <i className="fas fa-download"></i>
               </a>
-              <a href="#projects" className="btn btn-secondary">
-                <span>View Projects</span>
-                <i className="fas fa-arrow-right"></i>
+              <a
+                className="btn-outline"
+                href="#projects"
+                onClick={handleScrollToProjects}
+              >
+                <span>Explore My Work</span>
+                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>
+                  arrow_downward
+                </span>
               </a>
             </div>
-          </div>
-          
-          <div className="hero-image animate-fade-in">
-            <div className="profile-container">
-              <div className="profile-ring"></div>
-              <div className="profile-ring"></div>
-              <img src="/imgs/gib.jpg" alt="Koushik Shet" className="profile-img" />
+
+            {/* Status line */}
+            <div className="hero-status-line">
+              <span className="prompt">&gt;</span>
+              <span>Currently: AI Intern @ Sash Info Services &nbsp;·&nbsp; RAG · Python · Node.js</span>
+            </div>
+
+            {/* Terminal */}
+            <div className="hero-terminal">
+              <div className="terminal-header">
+                <span>koushik@system:~$ telemetry --identity</span>
+                <span style={{ letterSpacing: '3px' }}>[ _ ] [ □ ] [ × ]</span>
+              </div>
+              <div className="terminal-body">
+                <div>
+                  <span className="prompt-sym">$</span> <span className="cmd">whoami</span>
+                </div>
+                <div style={{ paddingLeft: '1rem' }}>
+                  Koushik D Shet <span style={{ color: 'var(--outline)' }}>— Karnataka, IN</span>
+                </div>
+                <div>
+                  <span className="prompt-sym">$</span> <span className="cmd">focus</span>
+                </div>
+                <div style={{ paddingLeft: '1rem' }}>
+                  Backend architecture, RAG pipelines, Event-driven systems
+                </div>
+                <div>
+                  <span className="prompt-sym">$</span> <span className="cmd">status</span>
+                </div>
+                <div style={{ paddingLeft: '1rem', display: 'flex', alignItems: 'center', gap: '6px' }}>
+                  <span>Available for opportunities...</span>
+                  <span className="cursor-blink"></span>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      
-      <div className="scroll-indicator">
-        <div className="mouse">
-          <div className="wheel"></div>
+
+          {/* Right Column — 3D Panel */}
+          <HeroScene3D />
         </div>
       </div>
     </section>

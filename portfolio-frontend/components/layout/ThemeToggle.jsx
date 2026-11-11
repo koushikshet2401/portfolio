@@ -2,26 +2,72 @@
 
 import { useState, useEffect } from 'react'
 
-export default function ThemeToggle() {
-  const [theme, setTheme] = useState('light')
+export default function ThemeToggle({ id = 'themeToggle', className = '' }) {
+  const [theme, setTheme] = useState('dark')
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || 'light'
-    setTheme(savedTheme)
-    document.documentElement.setAttribute('data-theme', savedTheme)
+    const saved = localStorage.getItem('portfolio-theme') || localStorage.getItem('theme') || 'dark'
+    setTheme(saved)
+    document.documentElement.setAttribute('data-theme', saved)
+
+    const handleThemeChange = (e) => {
+      if (e.detail?.theme) {
+        setTheme(e.detail.theme)
+      }
+    }
+    window.addEventListener('themechange', handleThemeChange)
+    return () => window.removeEventListener('themechange', handleThemeChange)
   }, [])
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light'
+  const toggleTheme = (e) => {
+    if (e && typeof e.stopPropagation === 'function') {
+      e.stopPropagation()
+    }
+    const currentTheme = document.documentElement.getAttribute('data-theme') || theme || 'dark'
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark'
+
     setTheme(newTheme)
     document.documentElement.setAttribute('data-theme', newTheme)
-    localStorage.setItem('theme', newTheme)
+    try {
+      localStorage.setItem('portfolio-theme', newTheme)
+      localStorage.setItem('theme', newTheme)
+    } catch (err) {}
+
+    // Dispatch global themechange event
+    window.dispatchEvent(new CustomEvent('themechange', { detail: { theme: newTheme } }))
+
+    if (typeof window.updateThreeColors === 'function') {
+      try {
+        window.updateThreeColors(newTheme)
+      } catch (err) {
+        console.warn('Three.js color update warning:', err)
+      }
+    }
   }
 
+  const isLight = theme === 'light'
+  const label = isLight ? 'Switch to dark theme' : 'Switch to light theme'
+  const title = isLight
+    ? 'Current: Sage Serenity Light (Click for Dark Theme)'
+    : 'Current: Dark Theme (Click for Sage Serenity Light)'
+
   return (
-    <div className="theme-toggle" onClick={toggleTheme} id="themeToggle">
-      <i className="fas fa-moon"></i>
-      <i className="fas fa-sun"></i>
-    </div>
+    <button
+      className={`theme-toggle-btn ${className}`}
+      id={id}
+      type="button"
+      onClick={toggleTheme}
+      aria-label={label}
+      title={title}
+    >
+      <div className="theme-toggle-track">
+        <span className="material-symbols-outlined theme-icon moon-track-icon">dark_mode</span>
+        <span className="material-symbols-outlined theme-icon sun-track-icon">light_mode</span>
+        <div className="theme-toggle-thumb">
+          <span className="material-symbols-outlined thumb-icon thumb-moon">dark_mode</span>
+          <span className="material-symbols-outlined thumb-icon thumb-sun">light_mode</span>
+        </div>
+      </div>
+    </button>
   )
 }

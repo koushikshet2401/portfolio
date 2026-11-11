@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
+  transpilePackages: ['gsap', 'lenis'],
   images: {
     domains: ['localhost', 'nextgeninvent.com', 'img.freepik.com', 'tse3.mm.bing.net'],
     unoptimized: true

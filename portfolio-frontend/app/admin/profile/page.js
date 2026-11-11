@@ -60,10 +60,11 @@ export default function AdminProfile() {
 
     try {
       const response = await uploadAPI.uploadFile(file)
-      if (response.data.success) {
+      const uploadedUrl = response.data?.data?.url || response.data?.url || response.url
+      if (uploadedUrl) {
         setProfile({
           ...profile,
-          resumeUrl: response.data.data.url
+          resumeUrl: uploadedUrl
         })
         setMessage('Resume uploaded successfully! Click "Save Changes" to save your profile.')
       }

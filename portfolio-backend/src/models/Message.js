@@ -40,7 +40,8 @@ const messageSchema = new mongoose.Schema({
   timestamps: true 
 })
 
-// Index for filtering
+// Indexes for filtering & hot queries
 messageSchema.index({ read: 1, createdAt: -1 })
+messageSchema.index({ createdAt: -1 })
 
 module.exports = mongoose.model('Message', messageSchema)
