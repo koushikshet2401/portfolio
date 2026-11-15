@@ -1,25 +1,32 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { certificatesAPI } from '@/lib/api'
+import { certificatesAPI, resolveAssetUrl } from '@/lib/api'
 
 export default function Certificates() {
   const [certs, setCerts] = useState(fallbackCerts)
 
   useEffect(() => {
+    let isMounted = true
     certificatesAPI.getAll()
       .then((res) => {
+        if (!isMounted) return
         if (res.data?.data && res.data.data.length > 0) {
           setCerts(res.data.data)
         }
       })
       .catch((err) => {
-        console.warn('Certificates API notice (using fallback):', err.message)
+        if (isMounted) {
+          console.warn('Certificates API notice (using fallback):', err.message)
+        }
       })
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   return (
-    <section id="certificates" className="section" style={{ background: 'transparent' }}>
+    <section className="section" style={{ background: 'transparent' }}>
       <div className="container">
         <div className="section-ribbon">
           <span className="section-tag">05 // CERTIFICATIONS</span>
@@ -33,16 +40,12 @@ export default function Certificates() {
             <a
               key={cert._id || index}
               className="cert-card reveal visible"
-              href={
-                cert.file?.startsWith('/uploads')
-                  ? `${(process.env.NEXT_PUBLIC_API_URL || 'http://localhost:5000/api').replace('/api', '')}${cert.file}`
-                  : (cert.file || cert.credentialUrl || '#')
-              }
+              href={resolveAssetUrl(cert.file) || cert.credentialUrl || '#'}
               target="_blank"
               rel="noopener noreferrer"
             >
               <div className="cert-icon-box">
-                <i className={cert.icon || 'fas fa-award'}></i>
+                <i className={cert.icon || 'fas fa-award'} aria-hidden="true"></i>
               </div>
               <div className="cert-info">
                 <h3>{cert.title}</h3>

@@ -7,11 +7,12 @@ export default function Experience() {
   const [experiences, setExperiences] = useState(fallbackExperiences)
 
   useEffect(() => {
+    let isMounted = true
     internshipsAPI.getAll()
       .then((res) => {
+        if (!isMounted) return
         if (res.data?.data && res.data.data.length > 0) {
-          // Format from MongoDB schema to timeline format
-          const formatted = res.data.data.map((item, idx) => ({
+          const formatted = res.data.data.map((item) => ({
             _id: item._id,
             role: item.title,
             current: item.duration?.toLowerCase().includes('present'),
@@ -19,19 +20,27 @@ export default function Experience() {
             period: item.duration,
             bullets: item.bullets && item.bullets.length > 0
               ? item.bullets
-              : (item.descriptionDesktop ? item.descriptionDesktop.split('. ').filter(Boolean).map(s => s.trim().endsWith('.') ? s : s + '.') : [item.descriptionMobile || '']),
-            tech: item.technologies || []
+              : (item.descriptionDesktop
+                  ? item.descriptionDesktop.split('. ').filter(Boolean).map((s) => (s.trim().endsWith('.') ? s : s + '.'))
+                  : [item.descriptionMobile || ''].filter(Boolean)),
+            tech: item.technologies || [],
           }))
           setExperiences(formatted)
         }
       })
       .catch((err) => {
-        console.warn('Internships API notice (using fallback):', err.message)
+        if (isMounted) {
+          console.warn('Internships API notice (using fallback):', err.message)
+        }
       })
+
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   return (
-    <section id="experience" className="section" style={{ background: 'transparent' }}>
+    <section className="section" style={{ background: 'transparent' }}>
       <div className="container">
         <div className="section-ribbon">
           <span className="section-tag">02 // EXPERIENCE</span>
@@ -49,22 +58,25 @@ export default function Experience() {
                   <div>
                     <div className="exp-title-row">
                       <span className="exp-title">{exp.role}</span>
-                      {exp.current && <span className="exp-badge">CURRENT</span>}
+                      {exp.current && <span className="badge-current">CURRENT</span>}
                     </div>
                     <div className="exp-company">{exp.company}</div>
                   </div>
-                  <div className="exp-period">{exp.period}</div>
+                  <div className="exp-date">{exp.period}</div>
                 </div>
 
                 <ul className="exp-bullets">
                   {exp.bullets.map((bullet, bIndex) => (
-                    <li key={bIndex}>{bullet}</li>
+                    <li key={bIndex}>
+                      <span className="bullet" aria-hidden="true">&gt;</span>
+                      <span>{bullet}</span>
+                    </li>
                   ))}
                 </ul>
 
-                <div className="exp-tech-row">
+                <div className="tech-badges">
                   {exp.tech.map((t, tIndex) => (
-                    <span key={tIndex} className="exp-tech-badge">
+                    <span key={tIndex} className="tech-badge">
                       {t}
                     </span>
                   ))}

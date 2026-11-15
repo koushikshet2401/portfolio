@@ -37,7 +37,7 @@ export default function Skills() {
   ]
 
   return (
-    <section id="stack" className="section" style={{ background: 'transparent' }}>
+    <section className="section" style={{ background: 'transparent' }}>
       <div className="container">
         <div className="section-ribbon">
           <span className="section-tag">04 // STACK</span>

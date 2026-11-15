@@ -17,7 +17,6 @@ export default function Hero() {
 
   return (
     <section
-      id="home"
       className="section"
       style={{ borderBottom: '1px solid var(--surface-container-high)', padding: '4rem 0' }}
     >
@@ -49,7 +48,7 @@ export default function Hero() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>
+                <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: '18px' }}>
                   download
                 </span>
                 <span>Download Resume</span>
@@ -60,7 +59,7 @@ export default function Hero() {
                 onClick={handleScrollToProjects}
               >
                 <span>Explore My Work</span>
-                <span className="material-symbols-outlined" style={{ fontSize: '18px' }}>
+                <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: '18px' }}>
                   arrow_downward
                 </span>
               </a>

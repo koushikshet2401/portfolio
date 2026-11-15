@@ -1,241 +1,433 @@
 'use client'
 
-import { useEffect, useRef, useState } from 'react'
-import * as THREE from 'three'
+import { useEffect, useRef, useState, useCallback } from 'react'
 
 export default function HeroScene3D() {
   const canvasRef = useRef(null)
   const hudTickRef = useRef(null)
-  const [hudText, setHudText] = useState('AXIS_ROT: +0.00° // TICK: 0ms')
+  const statusRef = useRef(null)
+
+  // Control state for UI rendering
+  const [direction, setDirection] = useState('CW') // 'CW' (Clockwise) or 'CCW' (Counter-Clockwise)
+  const [isPaused, setIsPaused] = useState(false)
+
+  // Mutable refs for high-frequency animation loop access
+  const directionRef = useRef(1) // 1 = CW (decreasing y), -1 = CCW (increasing y)
+  const isPausedRef = useRef(false)
+  const isDraggingRef = useRef(false)
+  const dragVelocityRef = useRef(0)
+  const lastPointerRef = useRef({ x: 0, y: 0 })
+  const groupRef = useRef(null)
+
+  // Toggle rotation direction
+  const handleToggleDirection = useCallback(() => {
+    setDirection((prev) => {
+      const next = prev === 'CW' ? 'CCW' : 'CW'
+      directionRef.current = next === 'CW' ? 1 : -1
+      return next
+    })
+  }, [])
+
+  // Toggle pause / resume
+  const handleTogglePause = useCallback(() => {
+    setIsPaused((prev) => {
+      const next = !prev
+      isPausedRef.current = next
+      if (statusRef.current) {
+        statusRef.current.textContent = next ? 'STATUS: PAUSED' : 'STATUS: NOMINAL'
+      }
+      return next
+    })
+  }, [])
 
   useEffect(() => {
-    // Skip 3D initialization on mobile/tablet screens (< 1024px) where panel is hidden
+    // 3D Model is disabled on mobile/tablet viewports (< 1024px)
     if (typeof window === 'undefined' || window.innerWidth < 1024) return
 
     const canvas = canvasRef.current
     if (!canvas) return
 
-    const rect = canvas.getBoundingClientRect()
-    const width = Math.max(rect.width, 300)
-    const height = Math.max(rect.height || 400, 300)
+    let cancelled = false
+    let cleanupFn = null
 
-    const scene = new THREE.Scene()
-    const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
-    camera.position.set(22, 18, 28)
-    camera.lookAt(0, 0, 0)
+    import('three').then((THREE) => {
+      if (cancelled || !canvasRef.current) return
 
-    let renderer
-    try {
-      renderer = new THREE.WebGLRenderer({
-        canvas,
-        alpha: true,
-        antialias: true,
-        powerPreference: 'default',
-        failIfMajorPerformanceCaveat: false,
-      })
-    } catch (e) {
-      return
-    }
+      const rect = canvas.getBoundingClientRect()
+      const width = Math.max(rect.width, 280)
+      const height = Math.max(rect.height || 360, 260)
 
-    renderer.setSize(width, height)
-    renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2))
-    renderer.shadowMap.enabled = true
+      const scene = new THREE.Scene()
+      const camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000)
+      camera.position.set(22, 16, 26)
+      camera.lookAt(0, 0, 0)
 
-    const onContextLost = (e) => {
-      e.preventDefault()
-    }
-    canvas.addEventListener('webglcontextlost', onContextLost, false)
-
-    // Lights
-    const ambientLight = new THREE.AmbientLight(0xffffff, 0.8)
-    scene.add(ambientLight)
-
-    const dirLight = new THREE.DirectionalLight(0xf0f4f5, 2.8)
-    dirLight.position.set(20, 30, 20)
-    scene.add(dirLight)
-
-    const crimsonRim = new THREE.PointLight(0xcc001e, 4.5, 40)
-    crimsonRim.position.set(-15, 10, -10)
-    scene.add(crimsonRim)
-
-    const rimLight2 = new THREE.PointLight(0xcc001e, 3.0, 30)
-    rimLight2.position.set(10, -10, 15)
-    scene.add(rimLight2)
-
-    // Materials
-    const mDark = new THREE.MeshLambertMaterial({ color: 0x1a1a1a, emissive: 0x050505 })
-    const mLight = new THREE.MeshLambertMaterial({ color: 0xf0f4f5, emissive: 0x222628 })
-    const mCrimson = new THREE.MeshPhongMaterial({ color: 0xcc001e, emissive: 0x440008, shininess: 90 })
-    const mCharc = new THREE.MeshLambertMaterial({ color: 0x2a2a2a })
-    const wMat = new THREE.MeshBasicMaterial({ color: 0x333333, wireframe: true, transparent: true, opacity: 0.2 })
-
-    const group = new THREE.Group()
-
-    // K-stem
-    const kStem = new THREE.Mesh(new THREE.BoxGeometry(2.4, 16, 2.4), mDark)
-    kStem.position.set(-5, 0, 0)
-    group.add(kStem)
-
-    // K-arms
-    const a1 = new THREE.Mesh(new THREE.BoxGeometry(2.2, 10, 2.2), mCrimson)
-    a1.rotation.z = -Math.PI / 4
-    a1.position.set(-1.2, 4.2, 0.8)
-    group.add(a1)
-
-    const a2 = new THREE.Mesh(new THREE.BoxGeometry(2.2, 10, 2.2), mLight)
-    a2.rotation.z = Math.PI / 4
-    a2.position.set(-1.2, -4.2, -0.6)
-    group.add(a2)
-
-    // Plates (S layers)
-    const p1 = new THREE.Mesh(new THREE.BoxGeometry(8, 0.6, 6), mCharc)
-    p1.position.set(4, 5.5, 0)
-    group.add(p1)
-
-    const p2 = new THREE.Mesh(new THREE.BoxGeometry(7, 0.6, 5), mCrimson)
-    p2.position.set(2.5, 0, 1.2)
-    group.add(p2)
-
-    const p3 = new THREE.Mesh(new THREE.BoxGeometry(8, 0.6, 6), mDark)
-    p3.position.set(4, -5.5, 0)
-    group.add(p3)
-
-    // Cubes
-    const c1 = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.2, 1.2), mCrimson)
-    c1.position.set(6.5, 2.5, -2)
-    group.add(c1)
-
-    const c2 = new THREE.Mesh(new THREE.BoxGeometry(1.2, 1.2, 1.2), mLight)
-    c2.position.set(5.5, -2.5, 3)
-    group.add(c2)
-
-    const c3 = new THREE.Mesh(new THREE.BoxGeometry(0.8, 0.8, 0.8), mCrimson)
-    c3.position.set(-7, 6, 2)
-    group.add(c3)
-
-    // Wireframe cage
-    const cage = new THREE.Mesh(new THREE.BoxGeometry(20, 20, 14), wMat)
-    group.add(cage)
-
-    scene.add(group)
-
-    const updateThemeColors = (currentTheme) => {
+      let renderer
       try {
-        if (currentTheme === 'light') {
-          crimsonRim.color.setHex(0x6b8e7b)
-          rimLight2.color.setHex(0x243b35)
-          mDark.color.setHex(0x243b35)
-          mDark.emissive.setHex(0x0a1210)
-          mLight.color.setHex(0xf1e9d2)
-          mLight.emissive.setHex(0x4a4435)
-          mCrimson.color.setHex(0x243b35)
-          mCrimson.emissive.setHex(0x13211e)
-          mCharc.color.setHex(0x6b8e7b)
-          wMat.color.setHex(0x6b8e7b)
-          wMat.opacity = 0.35
-          dirLight.color.setHex(0xf1e9d2)
-          dirLight.intensity = 2.2
-        } else {
-          crimsonRim.color.setHex(0xcc001e)
-          rimLight2.color.setHex(0xcc001e)
-          mDark.color.setHex(0x1a1a1a)
-          mDark.emissive.setHex(0x050505)
-          mLight.color.setHex(0xf0f4f5)
-          mLight.emissive.setHex(0x222628)
-          mCrimson.color.setHex(0xcc001e)
-          mCrimson.emissive.setHex(0x440008)
-          mCharc.color.setHex(0x2a2a2a)
-          wMat.color.setHex(0x333333)
-          wMat.opacity = 0.2
-          dirLight.color.setHex(0xf0f4f5)
-          dirLight.intensity = 2.8
-        }
-      } catch (err) {
-        console.warn('Three.js updateThemeColors warning:', err)
-      }
-    }
-
-    // Register globally for compatibility
-    window.updateThreeColors = updateThemeColors
-    const initialTheme = document.documentElement.getAttribute('data-theme') || 'dark'
-    updateThemeColors(initialTheme)
-
-    const onThemeChange = (e) => {
-      if (e.detail?.theme) updateThemeColors(e.detail.theme)
-    }
-    window.addEventListener('themechange', onThemeChange)
-
-    let mX = 0, mY = 0, tX = 0, tY = 0
-    const onMouseMove = (e) => {
-      mX = (e.clientX / window.innerWidth - 0.5) * 2
-      mY = (e.clientY / window.innerHeight - 0.5) * 2
-    }
-    window.addEventListener('mousemove', onMouseMove, { passive: true })
-
-    let tick = 0
-    let animationFrameId
-    const animate = () => {
-      animationFrameId = requestAnimationFrame(animate)
-      tick++
-      tX += (mX - tX) * 0.04
-      tY += (mY - tY) * 0.04
-
-      group.rotation.y += 0.004
-      group.rotation.x = tY * 0.35 + 0.1
-      group.rotation.z = -tX * 0.2
-      crimsonRim.intensity = 4.0 + Math.sin(Date.now() * 0.002) * 1.0
-
-      if (tick % 30 === 0) {
-        const text = `AXIS_ROT: +${(group.rotation.y * 57.3).toFixed(2)}° // TICK: ${tick * 16}ms`
-        if (hudTickRef.current) {
-          hudTickRef.current.textContent = text
-        }
+        renderer = new THREE.WebGLRenderer({
+          canvas,
+          alpha: true,
+          antialias: true,
+          powerPreference: 'default',
+          failIfMajorPerformanceCaveat: false,
+        })
+      } catch (e) {
+        return
       }
 
+      renderer.setSize(width, height)
+      renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 1.5))
+
+      const onContextLost = (e) => {
+        e.preventDefault()
+      }
+      canvas.addEventListener('webglcontextlost', onContextLost, false)
+
+      // ============================================================
+      // LIGHTING SETUP (Solid Black Model with Red Rim/Front Light)
+      // ============================================================
+      const ambientLight = new THREE.AmbientLight(0xffffff, 1.0)
+      scene.add(ambientLight)
+
+      const keyLight = new THREE.DirectionalLight(0xf0f4f5, 2.2)
+      keyLight.position.set(18, 26, 20)
+      scene.add(keyLight)
+
+      const fillLight = new THREE.DirectionalLight(0x556666, 0.6)
+      fillLight.position.set(-20, 10, 15)
+      scene.add(fillLight)
+
+      // Primary crimson rim light shining red along top & edge of K
+      const crimsonRim = new THREE.PointLight(0xff002b, 8.0, 50)
+      crimsonRim.position.set(-14, 13, -7)
+      scene.add(crimsonRim)
+
+      // Front crimson point light casting red light onto black K
+      const crimsonFront = new THREE.PointLight(0xff002b, 6.0, 45)
+      crimsonFront.position.set(12, 6, 17)
+      scene.add(crimsonFront)
+
+      // Lower crimson accent light
+      const crimsonBottom = new THREE.PointLight(0xcc001e, 3.5, 35)
+      crimsonBottom.position.set(-8, -10, 10)
+      scene.add(crimsonBottom)
+
+      // Solid Black Material (Obsidian / Black Titanium)
+      // The model itself is pure black; only the red light shines on it
+      const mLetterK = new THREE.MeshStandardMaterial({
+        color: 0x141615, // Solid black body
+        emissive: 0x020202, // Pure black emissive
+        roughness: 0.28, // Semi-gloss so red light reflects cleanly
+        metalness: 0.62, // Metallic reflections catch the red light
+      })
+      const wMat = new THREE.MeshBasicMaterial({
+        color: 0x444a46,
+        wireframe: true,
+        transparent: true,
+        opacity: 0.4,
+      })
+
+      const group = new THREE.Group()
+      groupRef.current = group
+
+      // ============================================================
+      // MATHEMATICAL 3D CAPITAL LETTER "K"
+      // ============================================================
+      const theta = (43 * Math.PI) / 180
+      const tanT = Math.tan(theta)
+      const sinT = Math.sin(theta)
+      const T = 2.4
+      const Wh = T / sinT // 3.519
+
+      const H = 7.0
+      const xStemL = -5.8
+      const xStemR = -3.4
+      const xArmL = 2.4
+      const xArmR = xArmL + Wh // ~5.919
+      const yJunc = H - tanT * (xArmL - xStemR) // ~1.591
+      const xCrook = xArmR - H / tanT // ~ -1.588
+
+      const kShape = new THREE.Shape()
+      kShape.moveTo(xStemL, H)
+      kShape.lineTo(xStemL, -H)
+      kShape.lineTo(xStemR, -H)
+      kShape.lineTo(xStemR, -yJunc)
+      kShape.lineTo(xArmL, -H)
+      kShape.lineTo(xArmR, -H)
+      kShape.lineTo(xCrook, 0.0)
+      kShape.lineTo(xArmR, H)
+      kShape.lineTo(xArmL, H)
+      kShape.lineTo(xStemR, yJunc)
+      kShape.lineTo(xStemR, H)
+      kShape.closePath()
+
+      const extrudeSettings = {
+        depth: 2.8,
+        bevelEnabled: true,
+        bevelThickness: 0.45,
+        bevelSize: 0.35,
+        bevelSegments: 4,
+      }
+
+      const kGeometry = new THREE.ExtrudeGeometry(kShape, extrudeSettings)
+      kGeometry.center() // Center geometry at (0, 0, 0)
+      kGeometry.computeVertexNormals()
+
+      const kMesh = new THREE.Mesh(kGeometry, mLetterK)
+      group.add(kMesh)
+
+      // Wireframe bounding box cage (20 x 20 x 14)
+      const cageGeometry = new THREE.BoxGeometry(20, 20, 14)
+      const cage = new THREE.Mesh(cageGeometry, wMat)
+      group.add(cage)
+
+      scene.add(group)
+
+      // Initial angle: slight perspective tilt
+      group.rotation.x = 0.14
+      group.rotation.y = -0.38
+
+      // Immediate render frame 0
       renderer.render(scene, camera)
-    }
-    animate()
 
-    const onResize = () => {
-      if (!canvas) return
-      const r = canvas.getBoundingClientRect()
-      const w = Math.max(r.width, 300)
-      const h = Math.max(r.height || 400, 300)
-      camera.aspect = w / h
-      camera.updateProjectionMatrix()
-      renderer.setSize(w, h)
-    }
-    window.addEventListener('resize', onResize)
+      // Theme Synchronization
+      const updateThemeColors = (currentTheme) => {
+        try {
+          if (currentTheme === 'light') {
+            crimsonRim.color.setHex(0x6b8e7b)
+            crimsonFront.color.setHex(0x243b35)
+            crimsonBottom.color.setHex(0x243b35)
+            mLetterK.color.setHex(0x243b35)
+            mLetterK.emissive.setHex(0x0a1210)
+            mLetterK.roughness = 0.32
+            mLetterK.metalness = 0.3
+            wMat.color.setHex(0x6b8e7b)
+            wMat.opacity = 0.5
+            keyLight.color.setHex(0xf1e9d2)
+            keyLight.intensity = 2.4
+            fillLight.color.setHex(0xb7c9b1)
+          } else {
+            crimsonRim.color.setHex(0xff002b)
+            crimsonFront.color.setHex(0xff002b)
+            crimsonBottom.color.setHex(0xcc001e)
+            mLetterK.color.setHex(0x141615) // Solid black
+            mLetterK.emissive.setHex(0x020202)
+            mLetterK.roughness = 0.28
+            mLetterK.metalness = 0.62
+            wMat.color.setHex(0x444a46)
+            wMat.opacity = 0.4
+            keyLight.color.setHex(0xf0f4f5)
+            keyLight.intensity = 2.2
+            fillLight.color.setHex(0x556666)
+          }
+          renderer.render(scene, camera)
+        } catch (err) {
+          console.warn('Three.js updateThemeColors warning:', err)
+        }
+      }
+
+      window.updateThreeColors = updateThemeColors
+      const initialTheme = document.documentElement.getAttribute('data-theme') || 'dark'
+      updateThemeColors(initialTheme)
+
+      const onThemeChange = (e) => {
+        if (e.detail?.theme) updateThemeColors(e.detail.theme)
+      }
+      window.addEventListener('themechange', onThemeChange)
+
+      // ============================================================
+      // POINTER DRAGGING SYSTEM (Desktop)
+      // ============================================================
+      let hoverX = 0, hoverY = 0
+      let targetTiltX = 0, targetTiltY = 0
+
+      const onPointerDown = (e) => {
+        if (e.button !== 0 && e.pointerType === 'mouse') return
+        isDraggingRef.current = true
+        dragVelocityRef.current = 0
+        lastPointerRef.current = { x: e.clientX, y: e.clientY }
+
+        try {
+          canvas.setPointerCapture(e.pointerId)
+        } catch (_) {}
+
+        if (statusRef.current) {
+          statusRef.current.textContent = 'STATUS: MANUAL_DRAG'
+        }
+      }
+
+      const onPointerMove = (e) => {
+        if (isDraggingRef.current) {
+          const deltaX = e.clientX - lastPointerRef.current.x
+          const deltaY = e.clientY - lastPointerRef.current.y
+          lastPointerRef.current = { x: e.clientX, y: e.clientY }
+
+          const rotDeltaY = deltaX * 0.008
+          group.rotation.y += rotDeltaY
+          dragVelocityRef.current = rotDeltaY
+
+          const nextRotX = group.rotation.x + deltaY * 0.006
+          group.rotation.x = Math.max(-0.55, Math.min(0.55, nextRotX))
+        } else if (e.pointerType === 'mouse') {
+          hoverX = (e.clientX / window.innerWidth - 0.5) * 2
+          hoverY = (e.clientY / window.innerHeight - 0.5) * 2
+        }
+      }
+
+      const onPointerUp = (e) => {
+        if (!isDraggingRef.current) return
+        isDraggingRef.current = false
+
+        try {
+          canvas.releasePointerCapture(e.pointerId)
+        } catch (_) {}
+
+        if (statusRef.current) {
+          statusRef.current.textContent = isPausedRef.current ? 'STATUS: PAUSED' : 'STATUS: NOMINAL'
+        }
+      }
+
+      canvas.addEventListener('pointerdown', onPointerDown)
+      canvas.addEventListener('pointermove', onPointerMove)
+      canvas.addEventListener('pointerup', onPointerUp)
+      canvas.addEventListener('pointercancel', onPointerUp)
+
+      // ============================================================
+      // FRAME-RATE INDEPENDENT ANIMATION LOOP
+      // ============================================================
+      const clock = new THREE.Clock()
+      let tick = 0
+      let animationFrameId
+      let isRunning = false
+      let isVisible = true
+
+      const startLoop = () => {
+        if (!isRunning && isVisible && !document.hidden && !cancelled && window.innerWidth >= 1024) {
+          isRunning = true
+          clock.start()
+          animate()
+        }
+      }
+
+      const stopLoop = () => {
+        isRunning = false
+        cancelAnimationFrame(animationFrameId)
+        clock.stop()
+      }
+
+      const animate = () => {
+        if (!isRunning || cancelled) return
+        animationFrameId = requestAnimationFrame(animate)
+        tick++
+
+        const delta = Math.min(clock.getDelta(), 0.1)
+
+        if (isDraggingRef.current) {
+          // Manual drag in progress
+        } else {
+          // Momentum decay
+          if (Math.abs(dragVelocityRef.current) > 0.0002) {
+            group.rotation.y += dragVelocityRef.current
+            dragVelocityRef.current *= 0.92
+          }
+
+          // Frame-rate independent auto rotation:
+          // Default: Clockwise (directionRef.current = 1)
+          if (!isPausedRef.current) {
+            const autoSpeed = 0.35 * delta // ~20° per second
+            group.rotation.y -= autoSpeed * directionRef.current
+          }
+
+          // Hover parallax
+          targetTiltX += (hoverX - targetTiltX) * 0.04
+          targetTiltY += (hoverY - targetTiltY) * 0.04
+          group.rotation.z = -targetTiltX * 0.1
+        }
+
+        // Pulse the crimson rim light
+        crimsonRim.intensity = 7.5 + Math.sin(Date.now() * 0.002) * 1.5
+
+        // Update HUD telemetry
+        if (tick % 10 === 0 && hudTickRef.current) {
+          const deg = ((((group.rotation.y * 180) / Math.PI) % 360) + 360) % 360
+          const dirLabel = directionRef.current === 1 ? 'CW' : 'CCW'
+          hudTickRef.current.textContent = `AXIS_ROT: +${deg.toFixed(2)}° // DIR: ${dirLabel}`
+        }
+
+        renderer.render(scene, camera)
+      }
+
+      const onVisibilityChange = () => {
+        if (document.hidden) stopLoop()
+        else startLoop()
+      }
+      document.addEventListener('visibilitychange', onVisibilityChange)
+
+      let heroObserver
+      if (typeof IntersectionObserver !== 'undefined') {
+        heroObserver = new IntersectionObserver(
+          ([entry]) => {
+            isVisible = entry.isIntersecting
+            if (isVisible) startLoop()
+            else stopLoop()
+          },
+          { threshold: 0.0 }
+        )
+        heroObserver.observe(canvas)
+      }
+
+      if (statusRef.current) {
+        statusRef.current.textContent = 'STATUS: NOMINAL'
+      }
+      startLoop()
+
+      const onResize = () => {
+        if (!canvasRef.current || !renderer) return
+        if (window.innerWidth < 1024) {
+          stopLoop()
+          return
+        }
+        const r = canvas.getBoundingClientRect()
+        const w = Math.max(r.width, 280)
+        const h = Math.max(r.height || 360, 260)
+        camera.aspect = w / h
+        camera.updateProjectionMatrix()
+        renderer.setSize(w, h)
+        renderer.render(scene, camera)
+        if (isVisible && !document.hidden) startLoop()
+      }
+      window.addEventListener('resize', onResize, { passive: true })
+
+      cleanupFn = () => {
+        stopLoop()
+        canvas.removeEventListener('webglcontextlost', onContextLost)
+        canvas.removeEventListener('pointerdown', onPointerDown)
+        canvas.removeEventListener('pointermove', onPointerMove)
+        canvas.removeEventListener('pointerup', onPointerUp)
+        canvas.removeEventListener('pointercancel', onPointerUp)
+        window.removeEventListener('themechange', onThemeChange)
+        window.removeEventListener('resize', onResize)
+        document.removeEventListener('visibilitychange', onVisibilityChange)
+        if (heroObserver) heroObserver.disconnect()
+        delete window.updateThreeColors
+
+        if (renderer) {
+          try {
+            renderer.dispose()
+          } catch (_) {}
+        }
+        kGeometry.dispose()
+        cageGeometry.dispose()
+        mLetterK.dispose()
+        wMat.dispose()
+      }
+    }).catch((err) => {
+      console.warn('Three.js failed to load:', err)
+    })
 
     return () => {
-      canvas.removeEventListener('webglcontextlost', onContextLost)
-      window.removeEventListener('themechange', onThemeChange)
-      window.removeEventListener('mousemove', onMouseMove)
-      window.removeEventListener('resize', onResize)
-      cancelAnimationFrame(animationFrameId)
-
-      // Safe dispose
-      if (renderer) {
-        try {
-          renderer.dispose()
-        } catch (e) {}
-      }
-      kStem.geometry.dispose()
-      a1.geometry.dispose()
-      a2.geometry.dispose()
-      p1.geometry.dispose()
-      p2.geometry.dispose()
-      p3.geometry.dispose()
-      c1.geometry.dispose()
-      c2.geometry.dispose()
-      c3.geometry.dispose()
-      cage.geometry.dispose()
-
-      mDark.dispose()
-      mLight.dispose()
-      mCrimson.dispose()
-      mCharc.dispose()
-      wMat.dispose()
+      cancelled = true
+      if (cleanupFn) cleanupFn()
     }
   }, [])
 
@@ -245,12 +437,51 @@ export default function HeroScene3D() {
         <span>SYS_COORD: 14.4426° N, 75.7179° E</span>
         <span className="coord-label">ENGINEERING_RACK_01</span>
       </div>
-      <canvas id="threejs-canvas" ref={canvasRef}></canvas>
+
+      <canvas
+        id="threejs-canvas"
+        ref={canvasRef}
+        aria-label="Interactive 3D capital letter K model. Click and drag to rotate."
+        role="img"
+      ></canvas>
+
       <div className="hero-3d-footer">
-        <span id="hud-tick" ref={hudTickRef}>
-          {hudText}
-        </span>
-        <span style={{ color: 'var(--on-surface)', fontWeight: 600 }}>STATUS: NOMINAL</span>
+        <div className="hero-3d-telemetry">
+          <span id="hud-tick" ref={hudTickRef}>
+            AXIS_ROT: +0.00° // DIR: CW
+          </span>
+          <span ref={statusRef} className="hero-3d-status">
+            STATUS: NOMINAL
+          </span>
+        </div>
+
+        <div className="hero-3d-controls" role="toolbar" aria-label="3D Model Controls">
+          <button
+            type="button"
+            className="hero-3d-btn"
+            onClick={handleToggleDirection}
+            title={direction === 'CW' ? 'Switch rotation to Counter-Clockwise' : 'Switch rotation to Clockwise'}
+            aria-label={`Toggle rotation direction. Currently ${direction === 'CW' ? 'Clockwise' : 'Counter-Clockwise'}`}
+          >
+            <span className="hero-3d-btn-icon" aria-hidden="true">
+              {direction === 'CW' ? '⟳' : '⟲'}
+            </span>
+            <span>{direction}</span>
+          </button>
+
+          <button
+            type="button"
+            className="hero-3d-btn"
+            onClick={handleTogglePause}
+            title={isPaused ? 'Resume auto-rotation' : 'Pause auto-rotation'}
+            aria-label={isPaused ? 'Resume auto-rotation' : 'Pause auto-rotation'}
+          >
+            <span className="hero-3d-btn-icon" aria-hidden="true">
+              {isPaused ? '▶' : '⏸'}
+            </span>
+            <span>{isPaused ? 'RESUME' : 'PAUSE'}</span>
+          </button>
+        </div>
       </div>
     </div>
   )

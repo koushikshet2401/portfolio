@@ -6,22 +6,25 @@ import { tracker } from '@/lib/tracking'
 
 export default function Projects() {
   const [projects, setProjects] = useState([])
-  const [loading, setLoading] = useState(true)
   const containerRef = useRef(null)
 
   useEffect(() => {
+    let isMounted = true
     projectsAPI.getAll()
       .then((res) => {
+        if (!isMounted) return
         if (res.data?.data && res.data.data.length > 0) {
           setProjects(res.data.data)
         }
       })
       .catch((err) => {
-        console.warn('Projects API request notice (using fallback):', err.message)
+        if (isMounted) {
+          console.warn('Projects API request notice (using fallback):', err.message)
+        }
       })
-      .finally(() => {
-        setLoading(false)
-      })
+    return () => {
+      isMounted = false
+    }
   }, [])
 
   // Viewport Dwell Time Tracking for project attention metrics
@@ -51,8 +54,8 @@ export default function Projects() {
     cardElements.forEach((el) => observer.observe(el))
 
     return () => {
+      observer.disconnect()
       cardElements.forEach((el) => {
-        observer.unobserve(el)
         const id = el.dataset.projId
         const title = el.dataset.projTitle
         if (title) tracker.endProjectDwell(id, title)
@@ -61,6 +64,7 @@ export default function Projects() {
   }, [projects])
 
   const handleTiltMove = (e) => {
+    if (typeof window !== 'undefined' && !window.matchMedia('(pointer: fine)').matches) return
     const card = e.currentTarget
     const rect = card.getBoundingClientRect()
     const x = e.clientX - rect.left
@@ -80,7 +84,7 @@ export default function Projects() {
   }
 
   return (
-    <section id="projects" className="section" style={{ background: 'transparent' }}>
+    <section className="section" style={{ background: 'transparent' }}>
       <div className="container" ref={containerRef}>
         <div className="section-ribbon">
           <span className="section-tag">03 // PROJECTS</span>
@@ -123,7 +127,7 @@ export default function Projects() {
                     aria-label={`${project.title} Link`}
                     onClick={() => tracker?.trackProjectClick(project._id, project.title, project.githubLink ? 'github_click' : 'live_demo_click', project.githubLink || project.liveLink)}
                   >
-                    <span className="material-symbols-outlined" style={{ fontSize: '20px' }}>
+                    <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: '20px' }}>
                       open_in_new
                     </span>
                   </a>

@@ -3,6 +3,7 @@
 import * as React from "react";
 import { ArrowUpRight, Edit3, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { resolveAssetUrl } from "@/lib/api";
 
 export interface NotchedProjectCardProps {
   href?: string;
@@ -58,16 +59,11 @@ export function NotchedProjectCard({
   actionIcon,
   actionLabel,
 }: NotchedProjectCardProps) {
-  const [imgSrc, setImgSrc] = React.useState(image);
+  const [imgSrc, setImgSrc] = React.useState(() => resolveAssetUrl(image));
   const [isHovered, setIsHovered] = React.useState(false);
 
   React.useEffect(() => {
-    if (image?.startsWith('/uploads/')) {
-      const backendBase = process.env.NEXT_PUBLIC_API_URL?.replace('/api', '') || 'http://localhost:5000'
-      setImgSrc(`${backendBase}${image}`)
-    } else {
-      setImgSrc(image)
-    }
+    setImgSrc(resolveAssetUrl(image));
   }, [image]);
 
   const handleArrowClick = (e: React.MouseEvent) => {
@@ -132,6 +128,7 @@ export function NotchedProjectCard({
           <img
             src={imgSrc || "https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80"}
             alt={screen ? "" : imageAlt || title}
+            loading="lazy"
             onError={() => {
               setImgSrc("https://images.unsplash.com/photo-1555066931-4365d14bab8c?w=800&auto=format&fit=crop&q=80");
             }}

@@ -50,7 +50,7 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar-footer">
-        <a href="/" className="nav-item" target="_blank">
+        <a href="/" className="nav-item" target="_blank" rel="noopener noreferrer">
           <i className="fas fa-external-link-alt"></i>
           <span>View Portfolio</span>
         </a>

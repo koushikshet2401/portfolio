@@ -25,7 +25,9 @@ export default function ScrollNavigation() {
   }, [])
 
   const scrollToTop = () => {
-    if (typeof window !== 'undefined' && window.__goToPortfolioSection) {
+    if (typeof window !== 'undefined' && window.__lenis) {
+      window.__lenis.scrollTo(0, { duration: 1.15 })
+    } else if (typeof window !== 'undefined' && window.__goToPortfolioSection) {
       window.__goToPortfolioSection('home')
     } else if (typeof window !== 'undefined') {
       window.scrollTo({ top: 0, behavior: 'smooth' })
@@ -33,11 +35,13 @@ export default function ScrollNavigation() {
   }
 
   const scrollToBottom = () => {
-    if (typeof window !== 'undefined' && window.__goToPortfolioSection) {
-      window.__goToPortfolioSection('contact')
-    } else if (typeof window !== 'undefined') {
+    if (typeof window === 'undefined') return
+    const maxY = Math.max(0, document.documentElement.scrollHeight - window.innerHeight)
+    if (window.__lenis) {
+      window.__lenis.scrollTo(maxY, { duration: 1.15 })
+    } else {
       window.scrollTo({
-        top: document.documentElement.scrollHeight,
+        top: maxY,
         behavior: 'smooth',
       })
     }

@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect, useRef } from 'react'
-import { projectsAPI, uploadAPI } from '@/lib/api'
+import { projectsAPI, uploadAPI, resolveAssetUrl } from '@/lib/api'
 
 export default function ProjectForm({ project, onClose }) {
   const [formData, setFormData] = useState({
@@ -57,12 +57,11 @@ export default function ProjectForm({ project, onClose }) {
       const response = await uploadAPI.uploadFile(file)
       const isSuccess = response.success || response.data?.success
       const uploadedPath =
-        response.fullUrl ||
         response.url ||
-        response.data?.fullUrl ||
         response.data?.url ||
-        response.data?.data?.fullUrl ||
-        response.data?.data?.url
+        response.data?.data?.url ||
+        response.fullUrl ||
+        response.data?.fullUrl
 
       if (isSuccess && uploadedPath) {
         setFormData((prev) => ({
@@ -238,7 +237,7 @@ export default function ProjectForm({ project, onClose }) {
                   ) : formData.image ? (
                     <div style={{ display: 'flex', alignItems: 'center', gap: '1rem', justifyContent: 'center' }}>
                       <img
-                        src={formData.image}
+                        src={resolveAssetUrl(formData.image)}
                         alt="Preview"
                         style={{
                           width: '90px',

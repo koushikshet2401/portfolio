@@ -13,10 +13,17 @@ export default function AdminLogin() {
 
   useEffect(() => {
     setMounted(true)
-    // If already logged in, redirect to admin
     const token = localStorage.getItem('adminToken')
     if (token) {
-      router.push('/admin')
+      authAPI.verifyToken()
+        .then(() => {
+          router.replace('/admin')
+        })
+        .catch((err) => {
+          if (err?.response?.status === 401 || err?.response?.status === 403) {
+            localStorage.removeItem('adminToken')
+          }
+        })
     }
   }, [router])
 
@@ -60,13 +67,13 @@ export default function AdminLogin() {
       alignItems: 'center',
       justifyContent: 'center',
       background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-      padding: '2rem',
+      padding: '1rem',
       fontFamily: 'Inter, system-ui, -apple-system, sans-serif',
     }}>
       <div style={{
         background: '#ffffff',
         borderRadius: '20px',
-        padding: '3rem',
+        padding: 'clamp(1.5rem, 5vw, 3rem)',
         width: '100%',
         maxWidth: '440px',
         boxShadow: '0 25px 80px rgba(0, 0, 0, 0.35)',

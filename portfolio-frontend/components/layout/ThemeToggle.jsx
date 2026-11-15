@@ -60,13 +60,45 @@ export default function ThemeToggle({ id = 'themeToggle', className = '' }) {
       aria-label={label}
       title={title}
     >
-      <div className="theme-toggle-track">
-        <span className="material-symbols-outlined theme-icon moon-track-icon">dark_mode</span>
-        <span className="material-symbols-outlined theme-icon sun-track-icon">light_mode</span>
-        <div className="theme-toggle-thumb">
-          <span className="material-symbols-outlined thumb-icon thumb-moon">dark_mode</span>
-          <span className="material-symbols-outlined thumb-icon thumb-sun">light_mode</span>
-        </div>
+      {/* Background track icons */}
+      <div className="track-icon track-moon" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+        </svg>
+      </div>
+      <div className="track-icon track-sun" aria-hidden="true">
+        <svg viewBox="0 0 24 24">
+          <circle cx="12" cy="12" r="4" />
+          <path d="M12 2v2" />
+          <path d="M12 20v2" />
+          <path d="m4.93 4.93 1.41 1.41" />
+          <path d="m17.66 17.66 1.41 1.41" />
+          <path d="M2 12h2" />
+          <path d="M20 12h2" />
+          <path d="m6.34 17.66-1.41 1.41" />
+          <path d="m19.07 4.93-1.41 1.41" />
+        </svg>
+      </div>
+
+      {/* Moving circular thumb */}
+      <div className="theme-toggle-thumb" aria-hidden="true">
+        {isLight ? (
+          <svg className="thumb-svg thumb-sun-svg" viewBox="0 0 24 24">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2" />
+            <path d="M12 20v2" />
+            <path d="m4.93 4.93 1.41 1.41" />
+            <path d="m17.66 17.66 1.41 1.41" />
+            <path d="M2 12h2" />
+            <path d="M20 12h2" />
+            <path d="m6.34 17.66-1.41 1.41" />
+            <path d="m19.07 4.93-1.41 1.41" />
+          </svg>
+        ) : (
+          <svg className="thumb-svg thumb-moon-svg" viewBox="0 0 24 24">
+            <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z" />
+          </svg>
+        )}
       </div>
     </button>
   )

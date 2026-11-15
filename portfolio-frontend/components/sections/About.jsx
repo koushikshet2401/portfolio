@@ -2,7 +2,7 @@
 
 export default function About() {
   return (
-    <section id="about" className="section">
+    <section className="section">
       <div className="container">
         <div className="section-ribbon">
           <span className="section-tag">01 // ABOUT</span>
@@ -115,7 +115,7 @@ export default function About() {
                 target="_blank"
                 rel="noopener noreferrer"
               >
-                <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>
+                <span className="material-symbols-outlined" aria-hidden="true" style={{ fontSize: '16px' }}>
                   open_in_new
                 </span>
                 <span>Inspect Profile on GitHub</span>

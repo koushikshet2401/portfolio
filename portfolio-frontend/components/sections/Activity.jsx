@@ -1,14 +1,16 @@
 'use client'
 
-import { useState, useEffect, useRef } from 'react'
+import { useState, useEffect } from 'react'
 
 export default function Activity() {
   const [tooltipText, setTooltipText] = useState('Hover a cell to view commit telemetry')
   const [totalContributions, setTotalContributions] = useState('288')
-  const [longestStreak, setLongestStreak] = useState('26')
+  const [longestStreak] = useState('26')
   const [cellsData, setCellsData] = useState([])
 
   useEffect(() => {
+    let cancelled = false
+    const activeControllers = []
     const USERNAME = 'koushikshet2401'
     const today = new Date()
     const startDate = new Date(today)
@@ -44,9 +46,12 @@ export default function Activity() {
       let fetched = false
 
       for (let i = 0; i < fetchURLs.length; i++) {
+        if (cancelled) return
+        let timeoutId
         try {
           const controller = new AbortController()
-          const timeoutId = setTimeout(() => controller.abort(), 8000)
+          activeControllers.push(controller)
+          timeoutId = setTimeout(() => controller.abort(), 8000)
           const res = await fetch(fetchURLs[i], { signal: controller.signal })
           clearTimeout(timeoutId)
 
@@ -69,20 +74,23 @@ export default function Activity() {
             break
           }
         } catch (err) {
+          clearTimeout(timeoutId)
           // Continue to next fallback URL
         }
       }
 
+      if (cancelled) return
+
       let total = 0
-      const updatedCells = initialCells.map((cell) => {
+      const updatedCells = initialCells.map((cell, idx) => {
         let count = contributionMap[cell.date] || 0
         if (!fetched) {
-          // Fallback pattern matching verified baseline
-          const r = Math.random()
-          if (r > 0.95) count = 12
-          else if (r > 0.88) count = 7
-          else if (r > 0.78) count = 3
-          else if (r > 0.65) count = 1
+          // Deterministic offline baseline pattern (seeded by index, avoids hydration mismatch or flicker)
+          const hash = ((idx * 2654435761) >>> 0) % 100
+          if (hash > 94) count = 12
+          else if (hash > 87) count = 7
+          else if (hash > 76) count = 3
+          else if (hash > 64) count = 1
         }
         total += count
 
@@ -105,14 +113,22 @@ export default function Activity() {
       } else {
         setTotalContributions('288')
       }
-      setLongestStreak('26')
     }
 
     fetchHeatmap()
+
+    return () => {
+      cancelled = true
+      activeControllers.forEach((c) => {
+        try {
+          c.abort()
+        } catch (e) {}
+      })
+    }
   }, [])
 
   return (
-    <section id="activity" className="section">
+    <section className="section">
       <div className="container">
         {/* Header */}
         <div className="activity-header">
@@ -178,6 +194,9 @@ export default function Activity() {
                     data-count={cell.count}
                     title={cell.title}
                     onMouseEnter={() =>
+                      setTooltipText(`${cell.date}: ${cell.count} contributions`)
+                    }
+                    onClick={() =>
                       setTooltipText(`${cell.date}: ${cell.count} contributions`)
                     }
                     onMouseLeave={() =>

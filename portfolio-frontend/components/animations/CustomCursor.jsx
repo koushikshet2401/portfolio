@@ -9,6 +9,9 @@ export default function CustomCursor() {
     const cursor = cursorRef.current
     if (!cursor) return
 
+    // Skip on touch-only / coarse-pointer devices (mobile, tablet) — no RAF loop wasted
+    if (!window.matchMedia('(pointer: fine)').matches) return
+
     let mouseX = window.innerWidth / 2
     let mouseY = window.innerHeight / 2
     let cursorX = mouseX

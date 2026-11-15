@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { profileAPI, uploadAPI } from '@/lib/api'
+import { profileAPI, uploadAPI, resolveAssetUrl } from '@/lib/api'
 
 export default function AdminProfile() {
   const [profile, setProfile] = useState({
@@ -179,7 +179,7 @@ export default function AdminProfile() {
               />
               {profile.resumeUrl && (
                 <a 
-                  href={profile.resumeUrl.startsWith('/') ? `http://localhost:5000${profile.resumeUrl}` : profile.resumeUrl} 
+                  href={resolveAssetUrl(profile.resumeUrl)} 
                   target="_blank" 
                   rel="noopener noreferrer"
                   className="btn btn-secondary"

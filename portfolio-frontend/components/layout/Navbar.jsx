@@ -1,7 +1,13 @@
 'use client'
 
 import { useState, useEffect } from 'react'
+import { Palette } from 'lucide-react'
 import ThemeToggle from './ThemeToggle'
+
+function mapToNavSection(sectionId) {
+  if (sectionId === 'activity') return 'home'
+  return sectionId || 'home'
+}
 
 export default function Navbar() {
   const [activeSection, setActiveSection] = useState('home')
@@ -10,18 +16,22 @@ export default function Navbar() {
   useEffect(() => {
     const handleSectionChange = (e) => {
       if (e.detail) {
-        setActiveSection(e.detail)
+        setActiveSection(mapToNavSection(e.detail))
       }
     }
 
     const handleScroll = () => {
       const sections = ['home', 'experience', 'projects', 'stack', 'certificates', 'contact']
-      const scrollPos = window.scrollY + 140
+      const centerLine = window.innerHeight * 0.4
 
       for (let i = sections.length - 1; i >= 0; i--) {
         const id = sections[i]
-        const element = document.getElementById(id)
-        if (element && element.offsetTop <= scrollPos) {
+        const el = document.getElementById(id)
+        if (!el) continue
+        // Use unpinned .pin-spacer wrapper if present so position:fixed does not skew top
+        const flowEl = el.parentElement?.classList?.contains('pin-spacer') ? el.parentElement : el
+        const rect = flowEl.getBoundingClientRect()
+        if (rect.top <= centerLine) {
           setActiveSection(id)
           break
         }
@@ -42,6 +52,7 @@ export default function Navbar() {
     if (href.startsWith('#')) {
       e.preventDefault()
       const targetId = href.replace('#', '')
+      setActiveSection(mapToNavSection(targetId))
       if (typeof window !== 'undefined' && window.__goToPortfolioSection) {
         window.__goToPortfolioSection(targetId)
       } else {
@@ -68,7 +79,7 @@ export default function Navbar() {
               <span className="status-dot"></span>
               <span
                 style={{
-                  fontFamily: "'JetBrains Mono', monospace",
+                  fontFamily: "var(--font-jetbrains-mono), 'JetBrains Mono', monospace",
                   fontSize: '0.6rem',
                   color: 'var(--secondary-text)',
                 }}
@@ -79,14 +90,14 @@ export default function Navbar() {
           </div>
 
           {/* Desktop nav links */}
-          <nav className="nav-links" id="navLinks">
+          <nav className="nav-links" id="navLinks" aria-label="Main navigation">
             <a
               href="#home"
               className={`nav-link ${activeSection === 'home' ? 'active' : ''}`}
               data-section="home"
               onClick={(e) => handleLinkClick(e, '#home')}
             >
-              About
+              Home
             </a>
             <a
               href="#experience"
@@ -140,13 +151,16 @@ export default function Navbar() {
               rel="noopener noreferrer"
               aria-label="GitHub Profile"
             >
-              <i className="fab fa-github" style={{ fontSize: '14px' }}></i>
+              <i className="fab fa-github" aria-hidden="true" style={{ fontSize: '14px' }}></i>
               <span>GitHub</span>
             </a>
             <button
+              type="button"
               className={`hamburger ${isMobileOpen ? 'active' : ''}`}
               id="hamburger"
               aria-label="Toggle menu"
+              aria-expanded={isMobileOpen}
+              aria-controls="mobileNav"
               onClick={() => setIsMobileOpen(!isMobileOpen)}
             >
               <span></span>
@@ -160,10 +174,8 @@ export default function Navbar() {
       {/* Mobile Nav */}
       <div className={`mobile-nav ${isMobileOpen ? 'open' : ''}`} id="mobileNav">
         <div className="mobile-theme-row">
-          <span className="mobile-theme-label">
-            <span className="material-symbols-outlined" style={{ fontSize: '16px' }}>
-              palette
-            </span>{' '}
+          <span className="mobile-theme-label" style={{ display: 'inline-flex', alignItems: 'center', gap: '0.375rem' }}>
+            <Palette size={16} aria-hidden="true" />
             Theme
           </span>
           <ThemeToggle id="mobileThemeToggle" />
@@ -222,9 +234,10 @@ export default function Navbar() {
           rel="noopener noreferrer"
           className="nav-link"
           id="mn-github"
+          onClick={() => setIsMobileOpen(false)}
           style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', color: 'var(--crimson)' }}
         >
-          <i className="fab fa-github"></i>
+          <i className="fab fa-github" aria-hidden="true"></i>
           <span>GitHub Profile</span>
         </a>
       </div>

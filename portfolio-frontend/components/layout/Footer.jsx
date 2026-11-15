@@ -12,7 +12,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             aria-label="LinkedIn"
           >
-            <i className="fab fa-linkedin-in"></i>
+            <i className="fab fa-linkedin-in" aria-hidden="true"></i>
           </a>
           <a
             className="footer-social-link"
@@ -21,7 +21,7 @@ export default function Footer() {
             rel="noopener noreferrer"
             aria-label="GitHub"
           >
-            <i className="fab fa-github"></i>
+            <i className="fab fa-github" aria-hidden="true"></i>
           </a>
           <a
             className="footer-social-link"
@@ -30,14 +30,14 @@ export default function Footer() {
             rel="noopener noreferrer"
             aria-label="Instagram"
           >
-            <i className="fab fa-instagram"></i>
+            <i className="fab fa-instagram" aria-hidden="true"></i>
           </a>
           <a
             className="footer-social-link"
             href="mailto:KoushikShet2401@gmail.com"
             aria-label="Email"
           >
-            <i className="fas fa-envelope"></i>
+            <i className="fas fa-envelope" aria-hidden="true"></i>
           </a>
         </div>
         <p className="footer-copy">

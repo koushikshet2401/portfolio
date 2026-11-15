@@ -6,7 +6,6 @@ import Footer from '@/components/layout/Footer'
 import CustomCursor from '@/components/animations/CustomCursor'
 import Hero from '@/components/sections/Hero'
 import Activity from '@/components/sections/Activity'
-import About from '@/components/sections/About'
 import Experience from '@/components/sections/Experience'
 import Projects from '@/components/sections/Projects'
 import Skills from '@/components/sections/Skills'
@@ -27,10 +26,9 @@ export default function Home() {
       }
     }
 
-    // Clean console and display professional branding
+    // Display professional branding in devtools console
     if (typeof console !== 'undefined') {
       try {
-        console.clear()
         console.log(
           '%c 🚀 Built by Koushik Shet %c Backend & Full-Stack Engineer %c',
           'background: #CC001E; color: #FFFFFF; font-weight: bold; padding: 4px 8px; border-radius: 4px 0 0 4px; font-size: 13px;',
@@ -53,7 +51,6 @@ export default function Home() {
     () => [
       { id: 'home', title: 'Home', component: <Hero /> },
       { id: 'activity', title: 'Telemetry', component: <Activity /> },
-      { id: 'about', title: 'About', component: <About /> },
       { id: 'experience', title: 'Experience', component: <Experience /> },
       { id: 'projects', title: 'Projects', component: <Projects /> },
       { id: 'stack', title: 'Stack', component: <Skills /> },
@@ -79,7 +76,7 @@ export default function Home() {
       <CustomCursor />
       <Navbar />
 
-      <main style={{ paddingTop: '64px' }}>
+      <main style={{ paddingTop: '64px', background: 'var(--surface-container-lowest)', minHeight: '100vh' }}>
         <PinnedScrollDeck sections={sections} />
       </main>
 
